@@ -28,4 +28,10 @@
 		</TaggedOutputs> -->
 	</ItemGroup>
 	<Import Project="$(MSBuildExtensionsPath32)\InstallShield\2013Limited\InstallShield.targets"/>
+	<ItemGroup>
+		<ProjectReference Include="..\RBTVSendeplanCS\RBTVSendeplanCS.csproj">
+			<Name>RBTVSendeplanCS</Name>
+			<Project>{5A76954C-2668-4596-815F-9EC90D65788C}</Project>
+		</ProjectReference>
+	</ItemGroup>
 </Project>
