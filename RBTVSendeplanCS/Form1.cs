@@ -114,23 +114,56 @@ namespace RBTVSendeplanCS
                 p.Size = new Size(panel.Size.Width, 50);
                 p.Location = new Point(0, i * 50);
 
+                PictureBox typePic = new PictureBox(){ SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) };
                 switch (Events[i].getType())
                 {
                     case EventType.Alt:
-                        p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources.rerun, SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) });
+                        typePic.Image = RBTVSendeplanCS.Properties.Resources.rerun;
                         break;
                     case EventType.Live:
-                        p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources.live, SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) });
+                        typePic.Image = RBTVSendeplanCS.Properties.Resources.live;
                         break;
                     case EventType.Neu:
-                        p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources._new, SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) });
+                        typePic.Image = RBTVSendeplanCS.Properties.Resources._new;
                         break;
                 }
-                p.Controls.Add(new Label() { Text = Events[i].getName(), Font = new Font(Font.Name, 10, FontStyle.Bold), Location = new Point(30, 10), Size = new Size(p.Size.Width, 20) });
-                p.Controls.Add(new Label() { Text = Events[i].getStart().ToString("dd.MM.yyyy HH:mm"), Location = new Point(40, 30) });
+                typePic.MouseEnter += new EventHandler(this.ParentMouseEnter);
+                typePic.MouseLeave += new EventHandler(this.ParentMouseLeave);
+                p.Controls.Add(typePic);
+                Label nameLabel = new Label() { Text = Events[i].getName(), Font = new Font(Font.Name, 10, FontStyle.Bold), Location = new Point(30, 10), Size = new Size(p.Size.Width, 20) };
+                nameLabel.MouseEnter += new EventHandler(this.ParentMouseEnter);
+                nameLabel.MouseLeave += new EventHandler(this.ParentMouseLeave);
+                p.Controls.Add(nameLabel);
+                Label timeLabel = new Label() { Text = Events[i].getStart().ToString("dd.MM.yyyy HH:mm"), Location = new Point(40, 30) };
+                timeLabel.MouseEnter += new EventHandler(this.ParentMouseEnter);
+                timeLabel.MouseLeave += new EventHandler(this.ParentMouseLeave);
+                p.Controls.Add(timeLabel);
+                p.MouseEnter += new EventHandler(this.PanelMouseEnter);
+                p.MouseLeave += new EventHandler(this.PanelMouseLeave);
 
                 panel.Controls.Add(p);
             }
+        }
+
+        private void ParentMouseEnter(object sender, EventArgs e)
+        {
+            Control c = (Control)sender;
+            PanelMouseEnter(c.Parent, EventArgs.Empty);
+        }
+        private void ParentMouseLeave(object sender, EventArgs e)
+        {
+            Control c = (Control)sender;
+            PanelMouseLeave(c.Parent, EventArgs.Empty);
+        }
+        private void PanelMouseEnter(object sender, EventArgs e)
+        {
+            Panel p = (Panel)sender;
+            p.BackColor = Color.CornflowerBlue;
+        }
+        private void PanelMouseLeave(object sender, EventArgs e)
+        {
+            Panel p = (Panel)sender;
+            p.BackColor = panel.BackColor;
         }
 
         //Update Sendeplan every interval
