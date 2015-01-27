@@ -46,6 +46,7 @@
             // 
             // cb_UpdateInterval
             // 
+            this.cb_UpdateInterval.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_UpdateInterval.FormattingEnabled = true;
             this.cb_UpdateInterval.Items.AddRange(new object[] {
             "1",
