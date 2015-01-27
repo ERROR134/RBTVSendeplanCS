@@ -16,6 +16,7 @@ namespace RBTVSendeplanCS
         //Membervars
         List<Event> Events;
         ToolTip toolTip;
+        bool MinimizedWithIcon;
 
         public Form1()
         {
@@ -48,7 +49,7 @@ namespace RBTVSendeplanCS
             Events = new List<Event>();
             PlanReader reader = new PlanReader();
             reader.setPath("https://www.google.com/calendar/ical/h6tfehdpu3jrbcrn9sdju9ohj8%40group.calendar.google.com/public/basic.ics");
-            if(reader.loadPlan())
+            if (reader.loadPlan())
                 Events = reader.readPlan();
             else
                 MessageBox.Show("Can't read file");
@@ -63,31 +64,7 @@ namespace RBTVSendeplanCS
         {
             Init();
             LoadEvents();
-
-            //put all the events in the panels
-            for (int i = 0; i < Events.Count - 1; i++)
-            {
-                Panel p = new Panel();
-                p.Size = new Size(panel.Size.Width, 50);
-                p.Location = new Point(0, i * 50);
-
-                switch(Events[i].getType())
-                {
-                    case EventType.Alt:
-                        p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources.rerun, SizeMode = PictureBoxSizeMode.Zoom,  Location = new Point(0, 0), Size = new Size(30,30)});
-                        break;
-                    case EventType.Live:
-                        p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources.live, SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) });
-                        break;
-                    case EventType.Neu:
-                        p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources._new, SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) });
-                        break;
-                }
-                p.Controls.Add(new Label() { Text = Events[i].getName(), Font = new Font(Font.Name, 10, FontStyle.Bold), Location = new Point(30,10), Size = new Size(p.Size.Width,20)});
-                p.Controls.Add(new Label() { Text = Events[i].getStart().ToString("dd.MM.yyyy HH:mm") , Location = new Point(40, 30) });
-
-                panel.Controls.Add(p);
-            }
+            AddEventsToPanel();
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -95,10 +72,14 @@ namespace RBTVSendeplanCS
             if (this.WindowState == FormWindowState.Minimized)
             {
                 NotifyIcon.Visible = true;
-                NotifyIcon.BalloonTipTitle = "RBTVSendeplan";
-                NotifyIcon.BalloonTipText = "Minimized to tray";
-                NotifyIcon.ShowBalloonTip(500);
+                if (MinimizedWithIcon == false)
+                {
+                    NotifyIcon.BalloonTipTitle = "RBTVSendeplan";
+                    NotifyIcon.BalloonTipText = "Minimized to tray";
+                    NotifyIcon.ShowBalloonTip(500);
+                }
                 this.Hide();
+                MinimizedWithIcon = false;
             }
         }
 
@@ -111,21 +92,52 @@ namespace RBTVSendeplanCS
                 this.WindowState = FormWindowState.Normal;
                 this.Location = new Point(System.Windows.Forms.Control.MousePosition.X - this.Width / 2, System.Windows.Forms.Control.MousePosition.Y - this.Height);
             }
-                //if form is normal visible hide it
-            else if(this.WindowState == FormWindowState.Normal)
+            //if form is normal visible hide it
+            else if (this.WindowState == FormWindowState.Normal)
             {
+                MinimizedWithIcon = true;
                 this.Hide();
                 this.WindowState = FormWindowState.Minimized;
             }
         }
 
-        
 
+        public void AddEventsToPanel()
+        {
+            //Clear panel first
+            panel.Controls.Clear();
+
+            //put all the events in the panels
+            for (int i = 0; i < Events.Count; i++)
+            {
+                Panel p = new Panel();
+                p.Size = new Size(panel.Size.Width, 50);
+                p.Location = new Point(0, i * 50);
+
+                switch (Events[i].getType())
+                {
+                    case EventType.Alt:
+                        p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources.rerun, SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) });
+                        break;
+                    case EventType.Live:
+                        p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources.live, SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) });
+                        break;
+                    case EventType.Neu:
+                        p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources._new, SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) });
+                        break;
+                }
+                p.Controls.Add(new Label() { Text = Events[i].getName(), Font = new Font(Font.Name, 10, FontStyle.Bold), Location = new Point(30, 10), Size = new Size(p.Size.Width, 20) });
+                p.Controls.Add(new Label() { Text = Events[i].getStart().ToString("dd.MM.yyyy HH:mm"), Location = new Point(40, 30) });
+
+                panel.Controls.Add(p);
+            }
+        }
 
         //Update Sendeplan every interval
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
             LoadEvents();
+            AddEventsToPanel();
         }
     }
 }
