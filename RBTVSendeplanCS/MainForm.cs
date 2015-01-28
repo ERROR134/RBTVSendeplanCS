@@ -33,7 +33,7 @@ namespace RBTVSendeplanCS
                 int newn = 1;
                 for (int i = 0; i < n - 1; i++)
                 {
-                    if (events[i].getStart() > events[i + 1].getStart())
+                    if (events[i].Start > events[i + 1].Start)
                     {
                         RbtvEvent e = events[i + 1];
                         events[i + 1] = events[i];
@@ -49,7 +49,7 @@ namespace RBTVSendeplanCS
         {
             m_events = new List<RbtvEvent>();
             PlanReader reader = new PlanReader();
-            reader.setCalendarPath(m_calendarPath);
+            reader.CalendarPath = m_calendarPath;
             if(reader.loadPlan())
                 m_events = reader.readPlan();
             else
@@ -72,7 +72,7 @@ namespace RBTVSendeplanCS
                 p.Size = new Size(panel.Size.Width, 50);
                 p.Location = new Point(0, i * 50);
 
-                switch(m_events[i].getType())
+                switch(m_events[i].EventType)
                 {
                     case RbtvEventType.Old:
                         p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources.rerun, SizeMode = PictureBoxSizeMode.Zoom,  Location = new Point(0, 0), Size = new Size(30,30)});
@@ -84,8 +84,8 @@ namespace RBTVSendeplanCS
                         p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources._new, SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) });
                         break;
                 }
-                p.Controls.Add(new Label() { Text = m_events[i].getName(), Font = new Font(Font.Name, 10, FontStyle.Bold), Location = new Point(30,10), Size = new Size(p.Size.Width,20)});
-                p.Controls.Add(new Label() { Text = m_events[i].getStart().ToString("dd.MM.yyyy HH:mm") , Location = new Point(40, 30) });
+                p.Controls.Add(new Label() { Text = m_events[i].Name, Font = new Font(Font.Name, 10, FontStyle.Bold), Location = new Point(30,10), Size = new Size(p.Size.Width,20)});
+                p.Controls.Add(new Label() { Text = m_events[i].Start.ToString("dd.MM.yyyy HH:mm") , Location = new Point(40, 30) });
 
                 panel.Controls.Add(p);
             }

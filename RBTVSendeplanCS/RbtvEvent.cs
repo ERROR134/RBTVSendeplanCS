@@ -16,58 +16,38 @@ namespace RBTVSendeplanCS
     public class RbtvEvent
     {
 
-        #region Membersvars
+        #region Membersvars + Props
         
         private string m_name;
+        public string Name
+        {
+            set { m_name = value; }
+            get { return m_name; }
+        }
+
         private RbtvEventType m_rbtvEventType;
+        public RbtvEventType EventType // EventType. Type is a reserved keyword
+        {
+            set { m_rbtvEventType = value; }
+            get { return m_rbtvEventType; }
+        }
+
         private DateTime m_startDateTime;
+        public DateTime Start
+        {
+            set { m_startDateTime = value; }
+            get { return m_startDateTime; }
+        }
+
         private DateTime m_endDateTime;
-
-        #endregion
-
-        #region Getter / Setter
-
-        public string getName()
+        public DateTime End
         {
-            return m_name;
-        }
-
-        public void setName(string name)
-        {
-            m_name = name;
-        }
-
-        public RbtvEventType getType()
-        {
-            return m_rbtvEventType;
-        }
-
-        public void setType(RbtvEventType type)
-        {
-            m_rbtvEventType = type;
-        }
-
-        public DateTime getStart()
-        {
-            return m_startDateTime;
-        }
-
-        public void setStart(DateTime dat)
-        {
-            m_startDateTime = dat;
-        }
-
-        public DateTime getEnd()
-        {
-            return m_endDateTime;
-        }
-
-        public void setEnd(DateTime dat)
-        {
-            m_endDateTime = dat;
+            set { m_endDateTime = value; }
+            get { return m_endDateTime; }
         }
 
         #endregion
+
 
         public RbtvEvent(DateTime start, DateTime end, string summary)
         {

@@ -15,26 +15,20 @@ namespace RBTVSendeplanCS.Reader
         const String Prefix_EventLine = "BEGIN:VEVENT";
         const String SummaryString = "SUMMARY:";
 
-        #region Membervars
+        #region Membervars + Props
 
-        private string m_calendarPath;
         private string m_document;
-
-        #endregion
-
-        #region Getter / Setter
-
-        public string getCalendarPath()
+        
+        private string m_calendarPath;
+        public string CalendarPath 
         {
-            return m_calendarPath;
-        }
-
-        public void setCalendarPath(string path)
-        {
-            m_calendarPath = path;
+            set { m_calendarPath = value; }
+            get { return m_calendarPath; }
         }
 
         #endregion
+
+        
 
         /// <summary>
         /// download Sendeplan as string
@@ -50,7 +44,7 @@ namespace RBTVSendeplanCS.Reader
                 client.Encoding = System.Text.Encoding.UTF8;
 
                 //Link to the calendar .ics file (XML date format sucks)
-                m_document = client.DownloadString(m_calendarPath);//"
+                m_document = client.DownloadString(CalendarPath);//"
             }
             catch (Exception e)//Could not download file. Assuming no internet connection
             {
