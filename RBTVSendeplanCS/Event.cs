@@ -18,7 +18,9 @@ namespace RBTVSendeplanCS
         public Event(DateTime start, DateTime end, string summary)
         {
             //check for Type of event
-            summary = summary.Substring(8);
+           /* summary = summary.Substring(8)
+            //set membervars
+            */
             if(summary[0] == '[')
             {
                 if (summary[1] == 'L')
@@ -29,10 +31,10 @@ namespace RBTVSendeplanCS
             }
             else
                 Type = EventType.Alt;
-            //set membervars
             Name = summary;
             Start = start;
             End = end;
+            
         }
         
         //Membervars
