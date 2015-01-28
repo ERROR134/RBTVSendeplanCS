@@ -7,24 +7,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RBTVSendeplanCS.Reader;
 
 
 namespace RBTVSendeplanCS
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         //Membervars
-        List<Event> Events;
-        ToolTip toolTip;
+        private List<RbtvEvent> m_events;
+        private ToolTip m_toolTip;
         bool MinimizedWithIcon;
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
         }
 
         //Sort all events with bubblesort. The events are in some weird order in the ics file
-        public void SortEvents(List<Event> events)
+        public void SortEvents(List<RbtvEvent> events)
         {
             int n = events.Count;
             do
@@ -32,9 +33,9 @@ namespace RBTVSendeplanCS
                 int newn = 1;
                 for (int i = 0; i < n - 1; i++)
                 {
-                    if (events[i].getStart() > events[i + 1].getStart())
+                    if (events[i].Start > events[i + 1].Start)
                     {
-                        Event e = events[i + 1];
+                        RbtvEvent e = events[i + 1];
                         events[i + 1] = events[i];
                         events[i] = e;
                         newn = i + 1;
@@ -46,17 +47,16 @@ namespace RBTVSendeplanCS
 
         private bool LoadEvents()
         {
-            Events = new List<Event>();
+            m_events = new List<RbtvEvent>();
             PlanReader reader = new PlanReader();
-            reader.setPath("https://www.google.com/calendar/ical/h6tfehdpu3jrbcrn9sdju9ohj8%40group.calendar.google.com/public/basic.ics");
+            reader.CalendarPath = m_calendarPath;
             if (reader.loadPlan())
-                Events = reader.readPlan();
+                m_events = reader.readPlan();
             else
                 MessageBox.Show("Can't read file");
 
 
-            SortEvents(Events);
-
+            SortEvents(m_events);
             return true;
         }
 
@@ -65,6 +65,7 @@ namespace RBTVSendeplanCS
             Init();
             LoadEvents();
             AddEventsToPanel();
+                    case EventType.Live:
         }
 
         private void Form1_Resize(object sender, EventArgs e)
