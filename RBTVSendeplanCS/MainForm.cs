@@ -18,6 +18,7 @@ namespace RBTVSendeplanCS
         private List<RbtvEvent> m_events;
         private ToolTip m_toolTip;
         bool MinimizedWithIcon;
+        PlanReader Reader;
 
         public MainForm()
         {
@@ -48,23 +49,30 @@ namespace RBTVSendeplanCS
         private bool LoadEvents()
         {
             m_events = new List<RbtvEvent>();
-            PlanReader reader = new PlanReader();
+            /*
             reader.CalendarPath = "https://www.google.com/calendar/ical/h6tfehdpu3jrbcrn9sdju9ohj8%40group.calendar.google.com/public/basic.ics";// m_calendarPath;
             if (reader.loadPlan())
                 m_events = reader.readPlan();
             else
                 MessageBox.Show("Can't read file");
 
+            */
 
+            Events = Reader.FetchEvents();
             SortEvents(m_events);
             return true;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Reader = new PlanReader();
+            bool r = Reader.Init().Result;
             Init();
             LoadEvents();
+           
             AddEventsToPanel();
+
+            
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -106,7 +114,6 @@ namespace RBTVSendeplanCS
         {
             //Clear panel first
             panel.Controls.Clear();
-
             //put all the events in the panels
             for (int i = 0; i < m_events.Count; i++)
             {
@@ -172,5 +179,6 @@ namespace RBTVSendeplanCS
             LoadEvents();
             AddEventsToPanel();
         }
+
     }
 }

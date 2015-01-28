@@ -7,10 +7,20 @@ using System.IO;
 using System.Net;
 using System.Globalization;
 
+using System.Threading;
 namespace RBTVSendeplanCS.Reader
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
+using Google.Apis.Util.Store;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Calendar.v3.Data;
+
+
+
 {
     class PlanReader
     {
+        CalendarService Service;
 
         const String Prefix_EventLine = "BEGIN:VEVENT";
         const String SummaryString = "SUMMARY:";
@@ -26,25 +36,34 @@ namespace RBTVSendeplanCS.Reader
             get { return m_calendarPath; }
         }
 
-        #endregion
+        public async Task<bool> Init()
+        {
+            try
+            {
+                //ClientSecrets cSecrets = new ClientSecrets() { ClientId = "1013054955529-ikp1u9umu52svmkn339sb0m0efrgll9r", ClientSecret = "Ui6YTLTybk3_jQNKEXJhCAvl " };
+                //await GoogleWebAuthorizationBroker.AuthorizeAsync(new ClientSecrets { ClientId = "1013054955529-go719ac80h62s47r9u27cdmgtskbh3ji.apps.googleusercontent.com", ClientSecret = "hTxJoX-KgI2QEk2_E0aYSw1C" }, new[] { CalendarService.Scope.CalendarReadonly }, "user", CancellationToken.None);//, new FileDataStore("RBTV")).Result;
+                Service = new CalendarService(new BaseClientService.Initializer { ApplicationName = "RBTV Sendeplan", ApiKey = "AIzaSyDU4GUSAxWwBcltZaPToJyxWlg7n_SDHEw" });
 
-        
+                
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
-        /// <summary>
-        /// download Sendeplan as string
-        /// </summary>
-        /// <returns></returns>
         public bool loadPlan()
         {
             try
             {
-                WebClient client = new WebClient();
+                //WebClient client = new WebClient();
 
                 //UTF8 for Schröckert
-                client.Encoding = System.Text.Encoding.UTF8;
+                //client.Encoding = System.Text.Encoding.UTF8;
 
                 //Link to the calendar .ics file (XML date format sucks)
-                m_document = client.DownloadString(CalendarPath);//"
+                //Doc = client.DownloadString(Path);//"
             }
             catch (Exception e)//Could not download file. Assuming no internet connection
             {
@@ -88,7 +107,33 @@ namespace RBTVSendeplanCS.Reader
 
             }
 
-            return events;
+        }
+
+        public List<Event> FetchEvents()
+        {
+            List<Event> newEvents = new List<Event>();
+            try
+            {
+
+                EventsResource.ListRequest lr = Service.Events.List("h6tfehdpu3jrbcrn9sdju9ohj8@group.calendar.google.com");
+                //EventsResource.ListRequest lr = Service.Events.List("error134@googlemail.com");
+                lr.TimeMin = DateTime.Now;
+                lr.TimeMax = DateTime.Now.AddDays(7);
+                lr.SingleEvents = true;
+
+                Events result = lr.Execute();
+
+                for(int i = 0; i < result.Items.Count; i++)
+                {
+                    newEvents.Add(new Event(result.Items[i].Start.DateTime.Value, result.Items[i].End.DateTime.Value, result.Items[i].Summary));
+                }
+                int debug_success;
+            }
+            catch
+            {
+                int debug_fail;
+            }
+            return newEvents;
         }
     }
 }

@@ -15,15 +15,16 @@ namespace RBTVSendeplanCS
     public partial class MainForm : Form
     {
         //Membervars
-<<<<<<< HEAD:RBTVSendeplanCS/Form1.cs
-        List<Event> Events;
-        ToolTip toolTip;
-        bool MinimizedWithIcon;
-=======
+<<<<<<< HEAD:RBTVSendeplanCS/MainForm.cs
         private List<RbtvEvent> m_events;
         private ToolTip m_toolTip;
-        private String m_calendarPath = "https://www.google.com/calendar/ical/h6tfehdpu3jrbcrn9sdju9ohj8%40group.calendar.google.com/public/basic.ics";
->>>>>>> ab55c7844afbf9840d2b30c4996dc50a44248b9c:RBTVSendeplanCS/MainForm.cs
+=======
+        List<Event> Events;
+        List<Event> NewEvents;
+        ToolTip toolTip;
+>>>>>>> GoogleApi:RBTVSendeplanCS/Form1.cs
+        bool MinimizedWithIcon;
+        PlanReader Reader;
 
         public MainForm()
         {
@@ -53,58 +54,42 @@ namespace RBTVSendeplanCS
 
         private bool LoadEvents()
         {
+<<<<<<< HEAD:RBTVSendeplanCS/MainForm.cs
             m_events = new List<RbtvEvent>();
             PlanReader reader = new PlanReader();
-<<<<<<< HEAD:RBTVSendeplanCS/Form1.cs
-            reader.setPath("https://www.google.com/calendar/ical/h6tfehdpu3jrbcrn9sdju9ohj8%40group.calendar.google.com/public/basic.ics");
-            if (reader.loadPlan())
-                Events = reader.readPlan();
+            reader.CalendarPath = "https://www.google.com/calendar/ical/h6tfehdpu3jrbcrn9sdju9ohj8%40group.calendar.google.com/public/basic.ics";// m_calendarPath;
 =======
-            reader.CalendarPath = m_calendarPath;
-            if(reader.loadPlan())
+            Events = new List<Event>();
+            /*
+            reader.setPath("https://www.google.com/calendar/ical/h6tfehdpu3jrbcrn9sdju9ohj8%40group.calendar.google.com/public/basic.ics");
+>>>>>>> GoogleApi:RBTVSendeplanCS/Form1.cs
+            if (reader.loadPlan())
                 m_events = reader.readPlan();
->>>>>>> ab55c7844afbf9840d2b30c4996dc50a44248b9c:RBTVSendeplanCS/MainForm.cs
             else
                 MessageBox.Show("Can't read file");
 
+            */
 
+<<<<<<< HEAD:RBTVSendeplanCS/MainForm.cs
             SortEvents(m_events);
+=======
+            Events = Reader.FetchEvents();
+            SortEvents(Events);
+
+>>>>>>> GoogleApi:RBTVSendeplanCS/Form1.cs
             return true;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Reader = new PlanReader();
+            bool r = Reader.Init().Result;
             Init();
             LoadEvents();
-<<<<<<< HEAD:RBTVSendeplanCS/Form1.cs
+           
             AddEventsToPanel();
-=======
 
-            //put all the events in the panels
-            for (int i = 0; i < m_events.Count - 1; i++)
-            {
-                Panel p = new Panel();
-                p.Size = new Size(panel.Size.Width, 50);
-                p.Location = new Point(0, i * 50);
-
-                switch(m_events[i].EventType)
-                {
-                    case RbtvEventType.Old:
-                        p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources.rerun, SizeMode = PictureBoxSizeMode.Zoom,  Location = new Point(0, 0), Size = new Size(30,30)});
-                        break;
-                    case RbtvEventType.Live:
-                        p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources.live, SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) });
-                        break;
-                    case RbtvEventType.New:
-                        p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources._new, SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) });
-                        break;
-                }
-                p.Controls.Add(new Label() { Text = m_events[i].Name, Font = new Font(Font.Name, 10, FontStyle.Bold), Location = new Point(30,10), Size = new Size(p.Size.Width,20)});
-                p.Controls.Add(new Label() { Text = m_events[i].Start.ToString("dd.MM.yyyy HH:mm") , Location = new Point(40, 30) });
-
-                panel.Controls.Add(p);
-            }
->>>>>>> ab55c7844afbf9840d2b30c4996dc50a44248b9c:RBTVSendeplanCS/MainForm.cs
+            
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -146,35 +131,34 @@ namespace RBTVSendeplanCS
         {
             //Clear panel first
             panel.Controls.Clear();
-
             //put all the events in the panels
-            for (int i = 0; i < Events.Count; i++)
+            for (int i = 0; i < m_events.Count; i++)
             {
                 Panel p = new Panel();
                 p.Size = new Size(panel.Size.Width, 50);
                 p.Location = new Point(0, i * 50);
 
                 PictureBox typePic = new PictureBox(){ SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) };
-                switch (Events[i].getType())
+                switch (m_events[i].EventType)
                 {
-                    case EventType.Alt:
+                    case RbtvEventType.Old:
                         typePic.Image = RBTVSendeplanCS.Properties.Resources.rerun;
                         break;
-                    case EventType.Live:
+                    case RbtvEventType.Live:
                         typePic.Image = RBTVSendeplanCS.Properties.Resources.live;
                         break;
-                    case EventType.Neu:
+                    case RbtvEventType.New:
                         typePic.Image = RBTVSendeplanCS.Properties.Resources._new;
                         break;
                 }
                 typePic.MouseEnter += new EventHandler(this.ParentMouseEnter);
                 typePic.MouseLeave += new EventHandler(this.ParentMouseLeave);
                 p.Controls.Add(typePic);
-                Label nameLabel = new Label() { Text = Events[i].getName(), Font = new Font(Font.Name, 10, FontStyle.Bold), Location = new Point(30, 10), Size = new Size(p.Size.Width, 20) };
+                Label nameLabel = new Label() { Text = m_events[i].Name, Font = new Font(Font.Name, 10, FontStyle.Bold), Location = new Point(30, 10), Size = new Size(p.Size.Width, 20) };
                 nameLabel.MouseEnter += new EventHandler(this.ParentMouseEnter);
                 nameLabel.MouseLeave += new EventHandler(this.ParentMouseLeave);
                 p.Controls.Add(nameLabel);
-                Label timeLabel = new Label() { Text = Events[i].getStart().ToString("dd.MM.yyyy HH:mm"), Location = new Point(40, 30) };
+                Label timeLabel = new Label() { Text = m_events[i].Start.ToString("dd.MM.yyyy HH:mm"), Location = new Point(40, 30) };
                 timeLabel.MouseEnter += new EventHandler(this.ParentMouseEnter);
                 timeLabel.MouseLeave += new EventHandler(this.ParentMouseLeave);
                 p.Controls.Add(timeLabel);
@@ -212,5 +196,6 @@ namespace RBTVSendeplanCS
             LoadEvents();
             AddEventsToPanel();
         }
+
     }
 }
