@@ -17,7 +17,7 @@ namespace RBTVSendeplanCS
         //Membervars
         private List<RbtvEvent> m_events;
         private ToolTip m_toolTip;
-        private String m_calendarUri = "https://www.google.com/calendar/ical/h6tfehdpu3jrbcrn9sdju9ohj8%40group.calendar.google.com/public/basic.ics";
+        private String m_calendarPath = "https://www.google.com/calendar/ical/h6tfehdpu3jrbcrn9sdju9ohj8%40group.calendar.google.com/public/basic.ics";
 
         public MainForm()
         {
@@ -49,7 +49,7 @@ namespace RBTVSendeplanCS
         {
             m_events = new List<RbtvEvent>();
             PlanReader reader = new PlanReader();
-            reader.setPath(m_calendarUri);
+            reader.setCalendarPath(m_calendarPath);
             if(reader.loadPlan())
                 m_events = reader.readPlan();
             else
@@ -74,13 +74,13 @@ namespace RBTVSendeplanCS
 
                 switch(m_events[i].getType())
                 {
-                    case RbtvEventType.Alt:
+                    case RbtvEventType.Old:
                         p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources.rerun, SizeMode = PictureBoxSizeMode.Zoom,  Location = new Point(0, 0), Size = new Size(30,30)});
                         break;
                     case RbtvEventType.Live:
                         p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources.live, SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) });
                         break;
-                    case RbtvEventType.Neu:
+                    case RbtvEventType.New:
                         p.Controls.Add(new PictureBox() { Image = RBTVSendeplanCS.Properties.Resources._new, SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) });
                         break;
                 }
