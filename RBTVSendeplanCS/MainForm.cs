@@ -48,22 +48,11 @@ namespace RBTVSendeplanCS
 
         private bool LoadEvents()
         {
-            m_events = new List<RbtvEvent>();
-            /*
-            reader.CalendarPath = "https://www.google.com/calendar/ical/h6tfehdpu3jrbcrn9sdju9ohj8%40group.calendar.google.com/public/basic.ics";// m_calendarPath;
-            if (reader.loadPlan())
-                m_events = reader.readPlan();
-            else
-                MessageBox.Show("Can't read file");
-
-            */
-
-            Events = Reader.FetchEvents();
-            SortEvents(m_events);
+            m_events = Reader.FetchEvents();
             return true;
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
             Reader = new PlanReader();
             bool r = Reader.Init().Result;
@@ -75,7 +64,7 @@ namespace RBTVSendeplanCS
             
         }
 
-        private void Form1_Resize(object sender, EventArgs e)
+        private void MainForm_Resize(object sender, EventArgs e)
         {
             if (this.WindowState == FormWindowState.Minimized)
             {
