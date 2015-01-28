@@ -26,7 +26,7 @@ namespace RBTVSendeplanCS
         }
 
         private RbtvEventType m_rbtvEventType;
-        public RbtvEventType EventType // EventType. Type is a reserved keyword
+        public RbtvEventType EventType
         {
             set { m_rbtvEventType = value; }
             get { return m_rbtvEventType; }
