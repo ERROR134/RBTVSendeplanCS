@@ -6,29 +6,30 @@ using System.Threading.Tasks;
 
 namespace RBTVSendeplanCS
 {
-    public enum EventType
+    public enum RbtvEventType
     {
         Live,
         Neu,
         Alt
     }
-    public class Event
+
+    public class RbtvEvent
     {
 
-        public Event(DateTime start, DateTime end, string summary)
+        public RbtvEvent(DateTime start, DateTime end, string summary)
         {
             //check for Type of event
             summary = summary.Substring(8);
             if(summary[0] == '[')
             {
                 if (summary[1] == 'L')
-                    Type = EventType.Live;
+                    Type = RbtvEventType.Live;
                 else if (summary[1] == 'N')
-                    Type = EventType.Neu;
+                    Type = RbtvEventType.Neu;
                 summary = summary.Substring(3);
             }
             else
-                Type = EventType.Alt;
+                Type = RbtvEventType.Alt;
             //set membervars
             Name = summary;
             Start = start;
@@ -37,7 +38,7 @@ namespace RBTVSendeplanCS
         
         //Membervars
         string Name;
-        EventType Type;
+        RbtvEventType Type;
         DateTime Start;
         DateTime End;
 
@@ -52,11 +53,11 @@ namespace RBTVSendeplanCS
             Name = name;
         }
 
-        public EventType getType()
+        public RbtvEventType getType()
         {
             return Type;
         }
-        public void setType(EventType type)
+        public void setType(RbtvEventType type)
         {
             Type = type;
         }

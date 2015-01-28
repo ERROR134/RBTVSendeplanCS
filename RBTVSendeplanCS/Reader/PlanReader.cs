@@ -7,7 +7,7 @@ using System.IO;
 using System.Net;
 using System.Globalization;
 
-namespace RBTVSendeplanCS
+namespace RBTVSendeplanCS.Reader
 {
     class PlanReader
     {
@@ -46,10 +46,10 @@ namespace RBTVSendeplanCS
         }
 
         //read and interpret downloaded plan
-        public List<Event> readPlan()
+        public List<RbtvEvent> readPlan()
         {
 
-            List<Event> Events = new List<Event>();
+            List<RbtvEvent> Events = new List<RbtvEvent>();
             
             StringReader strReader = new StringReader(Doc);
 
@@ -73,7 +73,7 @@ namespace RBTVSendeplanCS
                     DateTime Start = DateTime.ParseExact(start.Substring(8), "yyyyMMddTHHmmssssZ", CultureInfo.InvariantCulture);
                     DateTime End = DateTime.ParseExact(end.Substring(6), "yyyyMMddTHHmmssssZ", CultureInfo.InvariantCulture);
                     if(End >= DateTime.Now)
-                        Events.Add(new Event(Start, End, summary));//Ad new Event 
+                        Events.Add(new RbtvEvent(Start, End, summary));//Ad new Event 
                 }
 
             }

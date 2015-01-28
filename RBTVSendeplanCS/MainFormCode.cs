@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace RBTVSendeplanCS
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         void Init()
         {
@@ -24,7 +24,7 @@ namespace RBTVSendeplanCS
             picTwitch.SizeMode = PictureBoxSizeMode.Zoom;
             picReddit.SizeMode = PictureBoxSizeMode.Zoom;
 
-            toolTip = new ToolTip(this.components);
+            m_toolTip = new ToolTip(this.components);
 
             UpdateTimer.Interval = RBTVSendeplanCS.Properties.Settings.Default.UpdateInterval * 60 * 1000;
             UpdateTimer.Enabled = true;
@@ -54,12 +54,12 @@ namespace RBTVSendeplanCS
         }
         private void picAmazon_MouseEnter(object sender, EventArgs e)
         {
-            toolTip.Show("Amazon", picAmazon);
+            m_toolTip.Show("Amazon", picAmazon);
             Cursor = Cursors.Hand;
         }
         private void picAmazon_MouseLeave(object sender, EventArgs e)
         {
-            toolTip.Hide(picAmazon);
+            m_toolTip.Hide(picAmazon);
             Cursor = Cursors.Arrow;
         }
 
@@ -69,12 +69,12 @@ namespace RBTVSendeplanCS
         }
         private void picRbShop_MouseEnter(object sender, EventArgs e)
         {
-            toolTip.Show("Rocketbeans-Shop", picRbShop);
+            m_toolTip.Show("Rocketbeans-Shop", picRbShop);
             Cursor = Cursors.Hand;
         }
         private void picRbShop_MouseLeave(object sender, EventArgs e)
         {
-            toolTip.Hide(picRbShop);
+            m_toolTip.Hide(picRbShop);
             Cursor = Cursors.Arrow;
         }
 
@@ -84,12 +84,12 @@ namespace RBTVSendeplanCS
         }
         private void picG2a_MouseEnter(object sender, EventArgs e)
         {
-            toolTip.Show("G2A", picG2a);
+            m_toolTip.Show("G2A", picG2a);
             Cursor = Cursors.Hand;
         }
         private void picG2a_MouseLeave(object sender, EventArgs e)
         {
-            toolTip.Hide(picG2a);
+            m_toolTip.Hide(picG2a);
             Cursor = Cursors.Arrow;
         }
 
@@ -99,12 +99,12 @@ namespace RBTVSendeplanCS
         }
         private void picTwitter_MouseEnter(object sender, EventArgs e)
         {
-            toolTip.Show("Twitter", picTwitter);
+            m_toolTip.Show("Twitter", picTwitter);
             Cursor = Cursors.Hand;
         }
         private void picTwitter_MouseLeave(object sender, EventArgs e)
         {
-            toolTip.Hide(picTwitter);
+            m_toolTip.Hide(picTwitter);
             Cursor = Cursors.Arrow;
         }
 
@@ -114,12 +114,12 @@ namespace RBTVSendeplanCS
         }
         private void picFb_MouseEnter(object sender, EventArgs e)
         {
-            toolTip.Show("Facebook", picFb);
+            m_toolTip.Show("Facebook", picFb);
             Cursor = Cursors.Hand;
         }
         private void picFb_MouseLeave(object sender, EventArgs e)
         {
-            toolTip.Hide(picFb);
+            m_toolTip.Hide(picFb);
             Cursor = Cursors.Arrow;
         }
 
@@ -129,12 +129,12 @@ namespace RBTVSendeplanCS
         }
         private void picTwitch_MouseEnter(object sender, EventArgs e)
         {
-            toolTip.Show("Stream öffnen", picTwitch);
+            m_toolTip.Show("Stream öffnen", picTwitch);
             Cursor = Cursors.Hand;
         }
         private void picTwitch_MouseLeave(object sender, EventArgs e)
         {
-            toolTip.Hide(picTwitch);
+            m_toolTip.Hide(picTwitch);
             Cursor = Cursors.Arrow;
         }
 
@@ -144,12 +144,12 @@ namespace RBTVSendeplanCS
         }
         private void picReddit_MouseEnter(object sender, EventArgs e)
         {
-            toolTip.Show("Reddit", picReddit);
+            m_toolTip.Show("Reddit", picReddit);
             Cursor = Cursors.Hand;
         }
         private void picReddit_MouseLeave(object sender, EventArgs e)
         {
-            toolTip.Hide(picReddit);
+            m_toolTip.Hide(picReddit);
             Cursor = Cursors.Arrow;
         }
         #endregion

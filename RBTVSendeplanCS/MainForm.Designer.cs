@@ -1,6 +1,6 @@
 ﻿namespace RBTVSendeplanCS
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Erforderliche Designervariable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.panel = new System.Windows.Forms.Panel();
             this.NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -182,11 +182,11 @@
             this.picAmazon.MouseEnter += new System.EventHandler(this.picAmazon_MouseEnter);
             this.picAmazon.MouseLeave += new System.EventHandler(this.picAmazon_MouseLeave);
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(309, 369);
+            this.ClientSize = new System.Drawing.Size(309, 383);
             this.Controls.Add(this.picReddit);
             this.Controls.Add(this.picTwitch);
             this.Controls.Add(this.picFb);
@@ -196,9 +196,11 @@
             this.Controls.Add(this.picAmazon);
             this.Controls.Add(this.panel);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.MaximizeBox = false;
+            this.Name = "MainForm";
             this.Text = "RocketBeansTV";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);
