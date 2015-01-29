@@ -146,22 +146,6 @@ namespace RBTVSendeplanCS
         private void Form1_Load(object sender, EventArgs e)
         {
             Init();
-
-            // Add "loading..." to eventListPanel
-            Panel p = new Panel();
-            p.Name = m_eventPanelName;
-            p.Size = new Size(eventListPanel.Size.Width, 50);
-            p.Location = new Point(0, 0);
-            p.Controls.Add(
-                new Label() { 
-                    Text = "Loading events...", 
-                    Font = new Font(Font.Name, 10, FontStyle.Bold), 
-                    Location = new Point(0, 5), 
-                    Size = new Size(p.Size.Width, 20) 
-                });
-
-            eventListPanel.Controls.Add(p);
-
             new Thread(new ThreadStart(LoadEvents)).Start();
         }
 
