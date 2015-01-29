@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.panel = new System.Windows.Forms.Panel();
+            this.eventListPanel = new System.Windows.Forms.Panel();
             this.NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.einstellungenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,13 +53,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.picAmazon)).BeginInit();
             this.SuspendLayout();
             // 
-            // panel
+            // eventListPanel
             // 
-            this.panel.AutoScroll = true;
-            this.panel.Location = new System.Drawing.Point(12, 27);
-            this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(285, 251);
-            this.panel.TabIndex = 0;
+            this.eventListPanel.AutoScroll = true;
+            this.eventListPanel.Location = new System.Drawing.Point(12, 27);
+            this.eventListPanel.Name = "eventListPanel";
+            this.eventListPanel.Size = new System.Drawing.Size(285, 251);
+            this.eventListPanel.TabIndex = 0;
             // 
             // NotifyIcon
             // 
@@ -101,7 +101,7 @@
             // picReddit
             // 
             this.picReddit.Image = global::RBTVSendeplanCS.Properties.Resources.reddit;
-            this.picReddit.Location = new System.Drawing.Point(189, 330);
+            this.picReddit.Location = new System.Drawing.Point(191, 330);
             this.picReddit.Name = "picReddit";
             this.picReddit.Size = new System.Drawing.Size(62, 40);
             this.picReddit.TabIndex = 8;
@@ -113,7 +113,7 @@
             // picTwitch
             // 
             this.picTwitch.Image = global::RBTVSendeplanCS.Properties.Resources.Twitch;
-            this.picTwitch.Location = new System.Drawing.Point(121, 330);
+            this.picTwitch.Location = new System.Drawing.Point(123, 330);
             this.picTwitch.Name = "picTwitch";
             this.picTwitch.Size = new System.Drawing.Size(62, 40);
             this.picTwitch.TabIndex = 7;
@@ -125,7 +125,7 @@
             // picFb
             // 
             this.picFb.Image = global::RBTVSendeplanCS.Properties.Resources.facebook;
-            this.picFb.Location = new System.Drawing.Point(53, 330);
+            this.picFb.Location = new System.Drawing.Point(55, 330);
             this.picFb.Name = "picFb";
             this.picFb.Size = new System.Drawing.Size(62, 40);
             this.picFb.TabIndex = 6;
@@ -137,7 +137,7 @@
             // picTwitter
             // 
             this.picTwitter.Image = global::RBTVSendeplanCS.Properties.Resources.twitter;
-            this.picTwitter.Location = new System.Drawing.Point(223, 284);
+            this.picTwitter.Location = new System.Drawing.Point(226, 284);
             this.picTwitter.Name = "picTwitter";
             this.picTwitter.Size = new System.Drawing.Size(62, 40);
             this.picTwitter.TabIndex = 5;
@@ -149,7 +149,7 @@
             // picG2a
             // 
             this.picG2a.Image = global::RBTVSendeplanCS.Properties.Resources.g2a;
-            this.picG2a.Location = new System.Drawing.Point(155, 284);
+            this.picG2a.Location = new System.Drawing.Point(158, 284);
             this.picG2a.Name = "picG2a";
             this.picG2a.Size = new System.Drawing.Size(62, 40);
             this.picG2a.TabIndex = 3;
@@ -161,7 +161,7 @@
             // picRbShop
             // 
             this.picRbShop.Image = global::RBTVSendeplanCS.Properties.Resources.rbshop;
-            this.picRbShop.Location = new System.Drawing.Point(87, 284);
+            this.picRbShop.Location = new System.Drawing.Point(90, 284);
             this.picRbShop.Name = "picRbShop";
             this.picRbShop.Size = new System.Drawing.Size(62, 40);
             this.picRbShop.TabIndex = 2;
@@ -173,7 +173,7 @@
             // picAmazon
             // 
             this.picAmazon.Image = global::RBTVSendeplanCS.Properties.Resources.amazon_logo_SPOT;
-            this.picAmazon.Location = new System.Drawing.Point(19, 284);
+            this.picAmazon.Location = new System.Drawing.Point(22, 284);
             this.picAmazon.Name = "picAmazon";
             this.picAmazon.Size = new System.Drawing.Size(62, 40);
             this.picAmazon.TabIndex = 1;
@@ -186,7 +186,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(309, 383);
+            this.ClientSize = new System.Drawing.Size(309, 387);
             this.Controls.Add(this.picReddit);
             this.Controls.Add(this.picTwitch);
             this.Controls.Add(this.picFb);
@@ -194,9 +194,9 @@
             this.Controls.Add(this.picG2a);
             this.Controls.Add(this.picRbShop);
             this.Controls.Add(this.picAmazon);
-            this.Controls.Add(this.panel);
+            this.Controls.Add(this.eventListPanel);
             this.Controls.Add(this.menuStrip1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
@@ -221,7 +221,7 @@
         #endregion
 
         private System.Windows.Forms.NotifyIcon NotifyIcon;
-        private System.Windows.Forms.Panel panel;
+        private System.Windows.Forms.Panel eventListPanel;
         private System.Windows.Forms.PictureBox picAmazon;
         private System.Windows.Forms.PictureBox picRbShop;
         private System.Windows.Forms.PictureBox picG2a;
