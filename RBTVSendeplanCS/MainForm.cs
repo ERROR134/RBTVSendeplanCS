@@ -21,7 +21,6 @@ namespace RBTVSendeplanCS
 
         #region Membervars
 
-        private String m_eventPanelName = "eventPanel";
         private List<RbtvEvent> m_events;
         private ToolTip m_toolTip;
         private String m_calendarPath = "https://www.google.com/calendar/ical/h6tfehdpu3jrbcrn9sdju9ohj8%40group.calendar.google.com/public/basic.ics";
@@ -76,20 +75,13 @@ namespace RBTVSendeplanCS
                 return;
             }
 
-            // remove eventPanels and push updated/new events to the eventListPanel
-            Control[] eventPanels = eventListPanel.Controls.Find(m_eventPanelName, true);
-            if (eventPanels.Length > 0) {
-                foreach (Panel eventPanel in eventPanels) {
-                    eventListPanel.Controls.Remove(eventPanel);
-                }
-            }
-            
+
+            eventListPanel.Controls.Clear();
 
             // put all the events in the panels
             for (int i = 0; i < m_events.Count - 1; i++)
             {
                 Panel p = new Panel();
-                p.Name = m_eventPanelName;
                 p.Size = new Size(eventListPanel.Size.Width, 50);
                 p.Location = new Point(0, i * 50);
 
