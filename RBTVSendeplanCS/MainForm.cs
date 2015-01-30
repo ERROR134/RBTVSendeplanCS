@@ -56,7 +56,6 @@ namespace RBTVSendeplanCS
                 int newn = 1;
                 for (int i = 0; i < n - 1; i++)
                 {
-                    //if (events[i].Start > events[i + 1].Start)
                     if (events[i].Start.CompareTo(events[i + 1].Start) > 0)
                     {
                         RbtvEvent e = events[i + 1];
@@ -75,7 +74,6 @@ namespace RBTVSendeplanCS
 		{
 			m_events = m_planReader.FetchEvents();
 
-
             SortEvents(m_events);
 			if (Event_OnEventsLoaded != null)
 			{
@@ -86,18 +84,20 @@ namespace RBTVSendeplanCS
 
 		private void MainForm_Load(object sender, EventArgs e)
         {
-            ReaderType readerTypeToCreate = ReaderType.GoogleApi;
-
             // Fallback to ICS if there's no apiKey
-            if (String.IsNullOrEmpty(m_apiKey))
+            ReaderType readerTypeToCreate = (!String.IsNullOrEmpty(m_apiKey)) ? ReaderType.GoogleApi : ReaderType.GoogleIcs;
+
+            // Get reader and init
+            m_planReader = new ReaderFactory().CreateReader(m_calendarId, readerTypeToCreate);
+            if (m_planReader is GoogleApiReader)
             {
-                readerTypeToCreate = ReaderType.GoogleIcs;
+                ((GoogleApiReader) m_planReader).ApiKey = m_apiKey;
             }
 
-            m_planReader = new ReaderFactory().CreateReader(m_calendarId, readerTypeToCreate);
             bool r = m_planReader.Init().Result;
             Init();
      
+            // load event async (not waiting time for gui)
 			new Thread(new ThreadStart(LoadEvents)).Start();
         }
 
