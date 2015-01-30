@@ -157,7 +157,7 @@ namespace RBTVSendeplanCS
 			// There are now events
 			if (m_events.Count < 1)
 			{
-				Label loadingLabel = new Label() { Text = "No events found!", Font = new Font(Font.Name, 10, FontStyle.Bold), Location = new Point(5, 5), Size = new Size(eventListPanel.Size.Width, 20) };
+				Label loadingLabel = new Label() { Text = "No events found!", Font = new Font(Font.Name, 10, FontStyle.Regular), Location = new Point(5, 10), Size = new Size(eventListPanel.Size.Width, 20) };
 				eventListPanel.Controls.Add(loadingLabel);
 				return;
 			}

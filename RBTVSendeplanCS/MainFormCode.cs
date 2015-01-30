@@ -29,7 +29,7 @@ namespace RBTVSendeplanCS
             UpdateTimer.Interval = RBTVSendeplanCS.Properties.Settings.Default.UpdateInterval * 60 * 1000;
             UpdateTimer.Enabled = true;
 
-			Label loadingLabel = new Label() { Text = "Loading events...", Font = new Font(Font.Name, 10, FontStyle.Bold), Location = new Point(5, 5), Size = new Size(eventListPanel.Size.Width, 20) };
+			Label loadingLabel = new Label() { Text = "Loading events...", Font = new Font(Font.Name, 10, FontStyle.Regular), Location = new Point(5, 10), Size = new Size(eventListPanel.Size.Width, 20) };
 			eventListPanel.Controls.Add(loadingLabel);
         }
 
