@@ -7,88 +7,60 @@ using System.IO;
 using System.Net;
 using System.Globalization;
 
+using System.Threading;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
+using Google.Apis.Util.Store;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Calendar.v3.Data;
+
+
+
 namespace RBTVSendeplanCS.Reader
 {
     class PlanReader
     {
+        CalendarService Service;
 
-        const String Prefix_EventLine = "BEGIN:VEVENT";
-        const String SummaryString = "SUMMARY:";
-
-        #region Membervars + Props
-
-        private string m_document;
-        
-        private string m_calendarPath;
-        public string CalendarPath 
-        {
-            set { m_calendarPath = value; }
-            get { return m_calendarPath; }
-        }
-
-        #endregion
-
-        
-
-        /// <summary>
-        /// download Sendeplan as string
-        /// </summary>
-        /// <returns></returns>
-        public bool loadPlan()
+        public async Task<bool> Init()
         {
             try
             {
-                WebClient client = new WebClient();
+                Service = new CalendarService(new BaseClientService.Initializer { ApplicationName = "RBTV Sendeplan", ApiKey = "PUT OWN KEY HERE" }); //Sorry, I can't leave my key here....
 
-                //UTF8 for Schröckert
-                client.Encoding = System.Text.Encoding.UTF8;
-
-                //Link to the calendar .ics file (XML date format sucks)
-                m_document = client.DownloadString(CalendarPath);//"
+                
+                return true;
             }
-            catch (Exception e)//Could not download file. Assuming no internet connection
+            catch
             {
                 return false;
             }
-
-            //File was download without any problems
-            return true;
         }
 
-        /// <summary>
-        /// read and interpret downloaded plan
-        /// </summary>
-        /// <returns></returns>
-        public List<RbtvEvent> readPlan()
+
+        public List<RbtvEvent> FetchEvents()
         {
-            List<RbtvEvent> events = new List<RbtvEvent>();
-            StringReader strReader = new StringReader(m_document);
-
-            //current line in strReader
-            string line;
-            while((line = strReader.ReadLine()) != null)//Loop through whole doc
+            List<RbtvEvent> newEvents = new List<RbtvEvent>();
+            try
             {
-                if(line.Equals(Prefix_EventLine))//Every event starts with this line
+
+                EventsResource.ListRequest lr = Service.Events.List("h6tfehdpu3jrbcrn9sdju9ohj8@group.calendar.google.com");
+                lr.TimeMin = DateTime.Now;
+                lr.TimeMax = DateTime.Now.AddDays(7);
+                lr.SingleEvents = true;
+                lr.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+                Events result = lr.Execute();
+
+                for(int i = 0; i < result.Items.Count; i++)
                 {
-                    string start = strReader.ReadLine();//start time is next line
-                    string end = strReader.ReadLine();//end time is next line again
-                    string ls = line.Substring(0,8);
-                    while (!ls.Equals(SummaryString) )//Read till the first letters are "SUMMARY:"
-                    {
-                        line = strReader.ReadLine();
-                        ls  = line.Substring(0,8);
-                    }
-
-                    string summary = line;
-                    DateTime Start = DateTime.ParseExact(start.Substring(8), "yyyyMMddTHHmmssssZ", CultureInfo.InvariantCulture);
-                    DateTime End = DateTime.ParseExact(end.Substring(6), "yyyyMMddTHHmmssssZ", CultureInfo.InvariantCulture);
-                    if(End >= DateTime.Now)
-                        events.Add(new RbtvEvent(Start, End, summary));//Ad new Event 
+                    newEvents.Add(new RbtvEvent(result.Items[i].Start.DateTime.Value, result.Items[i].End.DateTime.Value, result.Items[i].Summary));
                 }
-
             }
-
-            return events;
+            catch
+            {
+            }
+            return newEvents;
         }
     }
 }

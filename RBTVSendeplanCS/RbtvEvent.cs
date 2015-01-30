@@ -26,7 +26,7 @@ namespace RBTVSendeplanCS
         }
 
         private RbtvEventType m_rbtvEventType;
-        public RbtvEventType EventType // EventType. Type is a reserved keyword
+        public RbtvEventType EventType
         {
             set { m_rbtvEventType = value; }
             get { return m_rbtvEventType; }
@@ -52,7 +52,6 @@ namespace RBTVSendeplanCS
         public RbtvEvent(DateTime start, DateTime end, string summary)
         {
             //check for Type of event
-            summary = summary.Substring(8);
             if(summary[0] == '[')
             {
                 if (summary[1] == 'L')
