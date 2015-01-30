@@ -99,6 +99,7 @@
     <Compile Include="MainFormCode.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Reader\GoogleApiReader.cs" />
     <Compile Include="Reader\PlanReader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
