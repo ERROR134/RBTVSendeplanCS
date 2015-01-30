@@ -27,8 +27,6 @@ namespace RBTVSendeplanCS.Reader
             try
             {
                 Service = new CalendarService(new BaseClientService.Initializer { ApplicationName = "RBTV Sendeplan", ApiKey = "PUT OWN KEY HERE" }); //Sorry, I can't leave my key here....
-
-                
                 return true;
             }
             catch
