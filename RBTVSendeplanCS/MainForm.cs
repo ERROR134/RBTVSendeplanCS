@@ -56,7 +56,8 @@ namespace RBTVSendeplanCS
                 int newn = 1;
                 for (int i = 0; i < n - 1; i++)
                 {
-                    if (events[i].Start > events[i + 1].Start)
+                    //if (events[i].Start > events[i + 1].Start)
+                    if (events[i].Start.CompareTo(events[i + 1].Start) > 0)
                     {
                         RbtvEvent e = events[i + 1];
                         events[i + 1] = events[i];
@@ -74,6 +75,8 @@ namespace RBTVSendeplanCS
 		{
 			m_events = m_planReader.FetchEvents();
 
+
+            SortEvents(m_events);
 			if (Event_OnEventsLoaded != null)
 			{
 				Event_OnEventsLoaded.Invoke(this, null);
