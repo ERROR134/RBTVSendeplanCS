@@ -21,12 +21,18 @@ namespace RBTVSendeplanCS
 
         #region Membervars
 
+        // FIXME: to be removed from here loading from config?
+        private String m_calendarId = "h6tfehdpu3jrbcrn9sdju9ohj8@group.calendar.google.com";
+
+        // FIXME: to be removed from here loading from config?
+        // Sorry, I can't leave my key here....
+        private String m_apiKey = "";  // PUT OWN KEY HERE
+
         private List<RbtvEvent> m_events;
         private ToolTip m_toolTip;
-
 		
 		private bool MinimizedWithIcon;
-		private PlanReader Reader;
+		private IPlanReader m_planReader;
         private event OnEventsLoadedHandler Event_OnEventsLoaded;
 
         #endregion
@@ -66,7 +72,7 @@ namespace RBTVSendeplanCS
 
 		private void LoadEvents()
 		{
-			m_events = Reader.FetchEvents();
+			m_events = m_planReader.FetchEvents();
 
 			if (Event_OnEventsLoaded != null)
 			{
@@ -77,12 +83,19 @@ namespace RBTVSendeplanCS
 
 		private void MainForm_Load(object sender, EventArgs e)
         {
-            Reader = new PlanReader();
-            bool r = Reader.Init().Result;
-            Init();     
+            ReaderType readerTypeToCreate = ReaderType.GoogleApi;
+
+            // Fallback to ICS if there's no apiKey
+            if (String.IsNullOrEmpty(m_apiKey))
+            {
+                readerTypeToCreate = ReaderType.GoogleIcs;
+            }
+
+            m_planReader = new ReaderFactory().CreateReader(m_calendarId, readerTypeToCreate);
+            bool r = m_planReader.Init().Result;
+            Init();
      
 			new Thread(new ThreadStart(LoadEvents)).Start();
-            
         }
 
 
