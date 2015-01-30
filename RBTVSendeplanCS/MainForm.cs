@@ -65,14 +65,14 @@ namespace RBTVSendeplanCS
        
 
 		private void LoadEvents()
-        {
-            m_events = Reader.FetchEvents();
+		{
+			m_events = Reader.FetchEvents();
 
 			if (Event_OnEventsLoaded != null)
 			{
 				Event_OnEventsLoaded.Invoke(this, null);
 			}
-        }
+		}
 
 
 		private void MainForm_Load(object sender, EventArgs e)
