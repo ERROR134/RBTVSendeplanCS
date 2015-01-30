@@ -6,26 +6,29 @@ using System.Threading.Tasks;
 
 namespace RBTVSendeplanCS.Reader
 {
-    public enum ReaderType {
-        GoogleIcs,
-        GoogleApi
+    public enum ReaderType
+    {
+        GoogleApi,
+        GoogleIcs
     }
 
-    public class ReaderFactory
+    class ReaderFactory
     {
-        public IPlanReader CreateReader(ReaderType readerTypeToCreate)
+        public IPlanReader CreateReader(String calendarId, ReaderType readerTypeToCreate) 
         {
             IPlanReader planReader = null;
-            switch(readerTypeToCreate) {
+            switch (readerTypeToCreate)
+            {
                 case ReaderType.GoogleApi:
-                    planReader = new GoogleApiReader();
+                    planReader = new GoogleApiReader(calendarId);
                     break;
                 case ReaderType.GoogleIcs:
-                    planReader = new GoogleIcsReader();
+                    planReader = new GoogleIcsReader(calendarId);
                     break;
             }
 
             return planReader;
         }
+
     }
 }

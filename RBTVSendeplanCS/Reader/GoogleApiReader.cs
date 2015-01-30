@@ -15,8 +15,19 @@ namespace RBTVSendeplanCS.Reader
 {
     public class GoogleApiReader : IPlanReader
     {
-        private String m_apiKey;
-        private String m_calenderName;
+
+        #region Members + Props
+
+        private String m_calenderId;
+
+
+        private String m_apiKey = "";
+        public String ApiKey
+        {
+            set { m_apiKey = value; }
+            get { return m_apiKey; }
+        }
+
 
         private CalendarService m_calendarService;
         public CalendarService Service
@@ -25,18 +36,19 @@ namespace RBTVSendeplanCS.Reader
             get { return m_calendarService; }
         }
 
+        #endregion
 
-        public GoogleApiReader()
+
+        public GoogleApiReader(String calendarId)
         {
-            // FIXME: to be removed
-            m_apiKey = "PUT OWN KEY HERE"; //Sorry, I can't leave my key here....
-            m_calenderName = "h6tfehdpu3jrbcrn9sdju9ohj8@group.calendar.google.com";
+            m_calenderId = calendarId;
         }
 
 
-        public GoogleApiReader(String calendarName, String apiKey)
+        public GoogleApiReader(String calendarId, String apiKey)
         {
             m_apiKey = apiKey;
+            m_calenderId = calendarId;
         }
 
 
@@ -44,7 +56,7 @@ namespace RBTVSendeplanCS.Reader
         {
             try
             {
-                Service = new CalendarService(new BaseClientService.Initializer { ApplicationName = "RBTV Sendeplan", ApiKey = m_apiKey }); 
+                Service = new CalendarService(new BaseClientService.Initializer { ApplicationName = "RBTV Sendeplan", ApiKey = ApiKey }); 
                 return true;
             }
             catch
@@ -60,7 +72,7 @@ namespace RBTVSendeplanCS.Reader
             try
             {
 
-                EventsResource.ListRequest lr = Service.Events.List(m_calenderName);
+                EventsResource.ListRequest lr = Service.Events.List(m_calenderId);
                 lr.TimeMin = DateTime.Now;
                 lr.TimeMax = DateTime.Now.AddDays(7);
                 lr.SingleEvents = true;
