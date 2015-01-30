@@ -26,7 +26,7 @@ namespace RBTVSendeplanCS
 
 		
 		private bool MinimizedWithIcon;
-		private PlanReader Reader;
+		private IPlanReader m_planReader;
         private event OnEventsLoadedHandler Event_OnEventsLoaded;
 
         #endregion
@@ -66,7 +66,7 @@ namespace RBTVSendeplanCS
 
 		private void LoadEvents()
 		{
-			m_events = Reader.FetchEvents();
+			m_events = m_planReader.FetchEvents();
 
 			if (Event_OnEventsLoaded != null)
 			{
@@ -77,9 +77,9 @@ namespace RBTVSendeplanCS
 
 		private void MainForm_Load(object sender, EventArgs e)
         {
-            Reader = new PlanReader();
-            bool r = Reader.Init().Result;
-            Init();     
+            m_planReader = new ReaderFactory().CreateReader(ReaderType.GoogleApi);
+            bool r = m_planReader.Init().Result;
+            Init();
      
 			new Thread(new ThreadStart(LoadEvents)).Start();
             
