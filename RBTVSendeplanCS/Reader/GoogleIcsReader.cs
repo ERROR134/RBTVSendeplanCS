@@ -11,8 +11,8 @@ namespace RBTVSendeplanCS.Reader
 {
     class GoogleIcsReader : IPlanReader
     {
-        const String Prefix_EventLine = "BEGIN:VEVENT";
-        const String SummaryString = "SUMMARY:";
+        const String SummaryString      = "SUMMARY:";
+        const String Prefix_EventLine   = "BEGIN:VEVENT";
 
 
         #region Members + Props

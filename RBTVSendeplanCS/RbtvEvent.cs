@@ -46,6 +46,21 @@ namespace RBTVSendeplanCS
             get { return m_endDateTime; }
         }
 
+        private DateTime m_lastTrayIconNotifyDateTime;
+        public DateTime LastTrayIconNotify
+        {
+            set { m_lastTrayIconNotifyDateTime = value; }
+            get { return m_lastTrayIconNotifyDateTime; }
+        }
+
+
+        private bool m_wasPushedToTrayIcon = false;
+        public bool WasPushedToTrayIcon
+        {
+            set { m_wasPushedToTrayIcon = value; }
+            get { return m_wasPushedToTrayIcon; }
+        }
+
         #endregion
 
 

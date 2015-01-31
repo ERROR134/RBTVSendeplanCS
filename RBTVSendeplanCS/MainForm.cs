@@ -21,6 +21,9 @@ namespace RBTVSendeplanCS
 
         #region Membervars
 
+
+        private System.Windows.Forms.Timer m_checkDateTimeForNotify;
+
         // FIXME: to be removed from here loading from config?
         private String m_calendarId = "h6tfehdpu3jrbcrn9sdju9ohj8@group.calendar.google.com";
 
@@ -99,6 +102,42 @@ namespace RBTVSendeplanCS
      
             // load event async (not waiting time for gui)
 			new Thread(new ThreadStart(LoadEvents)).Start();
+
+            m_checkDateTimeForNotify = new System.Windows.Forms.Timer();
+            m_checkDateTimeForNotify.Interval = 10000; // every 10 secs; 6 times per minute
+            m_checkDateTimeForNotify.Tick += new EventHandler(CheckDateTimeForNotify);
+            m_checkDateTimeForNotify.Start();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CheckDateTimeForNotify(object sender, EventArgs e)
+        {
+            foreach(RbtvEvent currentEvent in m_events) 
+            {
+                // just events which where never pushed to tooltip/tray icon
+                if (!currentEvent.WasPushedToTrayIcon)
+                {
+                    // 5 minutes before the show, trigger notify
+                    if (DateTime.Now >= currentEvent.Start.AddMinutes(0) && DateTime.Now <= currentEvent.Start) 
+                    {
+                        if (this.WindowState == FormWindowState.Minimized)
+                        {
+                            // notifyicon should be already there (see MainForm_Resize)
+                            NotifyIcon.BalloonTipTitle = "[RBTV] Sendeplan";
+                            NotifyIcon.BalloonTipText = currentEvent.Name.Trim() +" | " + currentEvent.Start.ToString("HH:mm") + " - " + currentEvent.End.ToString("HH:mm") + " | " + currentEvent.EventType.ToString().ToUpper();
+                            NotifyIcon.ShowBalloonTip(1500);
+
+                            currentEvent.WasPushedToTrayIcon = true;
+                            currentEvent.LastTrayIconNotify = DateTime.Now;
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -114,10 +153,19 @@ namespace RBTVSendeplanCS
                 NotifyIcon.Visible = true;
                 if (MinimizedWithIcon == false)
                 {
-                    NotifyIcon.BalloonTipTitle = "RBTVSendeplan";
-                    NotifyIcon.BalloonTipText = "Minimized to tray";
+                    string notifyTitle  = "[RBTV] Sendeplan";
+                    string notifyText   = "Minimized to tray";
+                    if (m_events.Count > 0)
+                    {
+                        // notifyTitle = "[RBTV] " + m_events[0].Name.Trim();
+                        notifyText = m_events[0].Name.Trim() + " | " + m_events[0].Start.ToString("HH:mm") + " - " + m_events[0].End.ToString("HH:mm") + " | " + m_events[0].EventType.ToString().ToUpper();
+                    }
+
+                    NotifyIcon.BalloonTipTitle  = notifyTitle;
+                    NotifyIcon.BalloonTipText   = notifyText;
                     NotifyIcon.ShowBalloonTip(500);
                 }
+
                 this.Hide();
                 MinimizedWithIcon = false;
             }
@@ -257,6 +305,5 @@ namespace RBTVSendeplanCS
         {
             LoadEvents();
         }
-
     }
 }
