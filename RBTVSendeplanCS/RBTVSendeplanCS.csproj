@@ -89,6 +89,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OnErrorEventArgs.cs" />
     <Compile Include="RbtvEvent.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

@@ -16,12 +16,12 @@ namespace RBTVSendeplanCS
 {
 
     public delegate void OnEventsLoadedHandler(object sender, EventArgs e);
+    public delegate void OnErrorHandler (object sender, OnErrorEventArgs e);
 
     public partial class MainForm : Form
     {
 
         #region Membervars
-
 
         private System.Windows.Forms.Timer m_checkDateTimeForNotify;
 
@@ -37,6 +37,8 @@ namespace RBTVSendeplanCS
 		
 		private bool MinimizedWithIcon;
 		private IPlanReader m_planReader;
+
+        private event OnErrorHandler Event_OnError;
         private event OnEventsLoadedHandler Event_OnEventsLoaded;
 
         #endregion
@@ -46,6 +48,7 @@ namespace RBTVSendeplanCS
         {
             InitializeComponent();
             Event_OnEventsLoaded += new OnEventsLoadedHandler(AddEventsToPanel);
+            Event_OnError += new OnErrorHandler(DisplayErrorPopup);
         }
 
         /// <summary>
@@ -76,45 +79,48 @@ namespace RBTVSendeplanCS
 
 		private void LoadEvents()
 		{
-			m_events = m_planReader.FetchEvents();
+            try
+            {
+                m_events = m_planReader.FetchEvents();
 
-            SortEvents(m_events);
-			if (Event_OnEventsLoaded != null)
-			{
-				Event_OnEventsLoaded.Invoke(this, null);
-			}
+                SortEvents(m_events);
+                if (Event_OnEventsLoaded != null)
+                {
+                    Event_OnEventsLoaded.Invoke(this, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (Event_OnError != null)
+                {
+                    Event_OnError.Invoke(null, new OnErrorEventArgs(ex));
+                }
+            }
 		}
 
 
 		private void MainForm_Load(object sender, EventArgs e)
         {
-            try
+            // Fallback to ICS if there's no apiKey
+            ReaderType readerTypeToCreate = (!String.IsNullOrEmpty(m_apiKey)) ? ReaderType.GoogleApi : ReaderType.GoogleIcs;
+
+            // Get reader and init
+            m_planReader = new ReaderFactory().CreateReader(m_calendarId, readerTypeToCreate);
+            if (m_planReader is GoogleApiReader)
             {
-                // Fallback to ICS if there's no apiKey
-                ReaderType readerTypeToCreate = (!String.IsNullOrEmpty(m_apiKey)) ? ReaderType.GoogleApi : ReaderType.GoogleIcs;
-
-                // Get reader and init
-                m_planReader = new ReaderFactory().CreateReader(m_calendarId, readerTypeToCreate);
-                if (m_planReader is GoogleApiReader)
-                {
-                    ((GoogleApiReader)m_planReader).ApiKey = m_apiKey;
-                }
-
-                bool r = m_planReader.Init().Result;
-                Init();
-
-                // load event async (not waiting time for gui)
-                new Thread(new ThreadStart(LoadEvents)).Start();
-
-                m_checkDateTimeForNotify = new System.Windows.Forms.Timer();
-                m_checkDateTimeForNotify.Interval = 10000; // every 10 secs; 6 times per minute
-                m_checkDateTimeForNotify.Tick += new EventHandler(CheckDateTimeForNotify);
-                m_checkDateTimeForNotify.Start();
+                ((GoogleApiReader)m_planReader).ApiKey = m_apiKey;
             }
-            catch (Exception)
-            {
-                
-            }
+
+            bool r = m_planReader.Init().Result;
+            Init();
+
+            // load event async (not waiting time for gui)
+            new Thread(new ThreadStart(LoadEvents)).Start();
+
+            m_checkDateTimeForNotify = new System.Windows.Forms.Timer();
+            m_checkDateTimeForNotify.Interval = 10000; // every 10 secs; 6 times per minute
+            m_checkDateTimeForNotify.Tick += new EventHandler(CheckDateTimeForNotify);
+            m_checkDateTimeForNotify.Start();
         }
 
 
@@ -125,23 +131,26 @@ namespace RBTVSendeplanCS
         /// <param name="e"></param>
         private void CheckDateTimeForNotify(object sender, EventArgs e)
         {
-            foreach(RbtvEvent currentEvent in m_events) 
+            if (m_events != null)
             {
-                // just events which where never pushed to tooltip/tray icon
-                if (!currentEvent.WasPushedToTrayIcon)
+                foreach (RbtvEvent currentEvent in m_events)
                 {
-                    // 5 minutes before the show, trigger notify
-                    if (DateTime.Now >= currentEvent.Start.AddMinutes(0) && DateTime.Now <= currentEvent.Start) 
+                    // just events which where never pushed to tooltip/tray icon
+                    if (!currentEvent.WasPushedToTrayIcon)
                     {
-                        if (this.WindowState == FormWindowState.Minimized)
+                        // 5 minutes before the show, trigger notify
+                        if (DateTime.Now >= currentEvent.Start.AddMinutes(0) && DateTime.Now <= currentEvent.Start)
                         {
-                            // notifyicon should be already there (see MainForm_Resize)
-                            NotifyIcon.BalloonTipTitle = "[RBTV] Sendeplan";
-                            NotifyIcon.BalloonTipText = currentEvent.Name.Trim() +" | " + currentEvent.Start.ToString("HH:mm") + " - " + currentEvent.End.ToString("HH:mm") + " | " + currentEvent.EventType.ToString().ToUpper();
-                            NotifyIcon.ShowBalloonTip(1500);
+                            if (this.WindowState == FormWindowState.Minimized)
+                            {
+                                // notifyicon should be already there (see MainForm_Resize)
+                                NotifyIcon.BalloonTipTitle = "[RBTV] Sendeplan";
+                                NotifyIcon.BalloonTipText = currentEvent.Name.Trim() + " | " + currentEvent.Start.ToString("HH:mm") + " - " + currentEvent.End.ToString("HH:mm") + " | " + currentEvent.EventType.ToString().ToUpper();
+                                NotifyIcon.ShowBalloonTip(1500);
 
-                            currentEvent.WasPushedToTrayIcon = true;
-                            currentEvent.LastTrayIconNotify = DateTime.Now;
+                                currentEvent.WasPushedToTrayIcon = true;
+                                currentEvent.LastTrayIconNotify = DateTime.Now;
+                            }
                         }
                     }
                 }
@@ -312,6 +321,24 @@ namespace RBTVSendeplanCS
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
             LoadEvents();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        public void DisplayErrorPopup(object sender, OnErrorEventArgs eventArgs)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(
+                    (MethodInvoker) delegate {
+                        DisplayErrorPopup(sender, eventArgs);
+                    });
+            }
+
+            MessageBox.Show(eventArgs.Error.Message, "Es ist ein Fehler aufgetreten!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }
