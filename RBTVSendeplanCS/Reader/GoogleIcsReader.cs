@@ -81,8 +81,19 @@ namespace RBTVSendeplanCS.Reader
                     }
 
                     string summary = line.Substring(8);
-                    DateTime Start = DateTime.ParseExact(start.Substring(8), "yyyyMMddTHHmmssssZ", CultureInfo.InvariantCulture);
-                    DateTime End = DateTime.ParseExact(end.Substring(6), "yyyyMMddTHHmmssssZ", CultureInfo.InvariantCulture);
+                    start = start.Substring(start.IndexOf(':') + 1);
+                    end = end.Substring(end.IndexOf(':') + 1);
+                    DateTime Start, End;
+                    try
+                    {
+                        Start = DateTime.ParseExact(start, "yyyyMMddTHHmmssssZ", CultureInfo.InvariantCulture);
+                        End = DateTime.ParseExact(end, "yyyyMMddTHHmmssssZ", CultureInfo.InvariantCulture);
+                    }
+                    catch
+                    {
+                        Start = DateTime.ParseExact(start, "yyyyMMddTHHmmssss", CultureInfo.InvariantCulture);
+                        End = DateTime.ParseExact(end, "yyyyMMddTHHmmssss", CultureInfo.InvariantCulture);
+                    }
                     if (End >= DateTime.Now)
                         events.Add(new RbtvEvent(Start, End, summary));//Ad new Event 
                 }
