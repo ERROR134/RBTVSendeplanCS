@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
-using System.Net;
-using System.Globalization;
 
 using System.Threading;
 using Google.Apis.Auth.OAuth2;
@@ -14,21 +11,52 @@ using Google.Apis.Util.Store;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 
-
-
 namespace RBTVSendeplanCS.Reader
 {
-    class PlanReader
+    public class GoogleApiReader : IPlanReader
     {
-        CalendarService Service;
+
+        #region Members + Props
+
+        private String m_calenderId;
+
+
+        private String m_apiKey = "";
+        public String ApiKey
+        {
+            set { m_apiKey = value; }
+            get { return m_apiKey; }
+        }
+
+
+        private CalendarService m_calendarService;
+        public CalendarService Service
+        {
+            set { m_calendarService = value; }
+            get { return m_calendarService; }
+        }
+
+        #endregion
+
+
+        public GoogleApiReader(String calendarId)
+        {
+            m_calenderId = calendarId;
+        }
+
+
+        public GoogleApiReader(String calendarId, String apiKey)
+        {
+            m_apiKey = apiKey;
+            m_calenderId = calendarId;
+        }
+
 
         public async Task<bool> Init()
         {
             try
             {
-                Service = new CalendarService(new BaseClientService.Initializer { ApplicationName = "RBTV Sendeplan", ApiKey = "PUT OWN KEY HERE" }); //Sorry, I can't leave my key here....
-
-                
+                Service = new CalendarService(new BaseClientService.Initializer { ApplicationName = "RBTV Sendeplan", ApiKey = ApiKey }); 
                 return true;
             }
             catch
@@ -44,7 +72,7 @@ namespace RBTVSendeplanCS.Reader
             try
             {
 
-                EventsResource.ListRequest lr = Service.Events.List("h6tfehdpu3jrbcrn9sdju9ohj8@group.calendar.google.com");
+                EventsResource.ListRequest lr = Service.Events.List(m_calenderId);
                 lr.TimeMin = DateTime.Now;
                 lr.TimeMax = DateTime.Now.AddDays(7);
                 lr.SingleEvents = true;
@@ -52,7 +80,7 @@ namespace RBTVSendeplanCS.Reader
 
                 Events result = lr.Execute();
 
-                for(int i = 0; i < result.Items.Count; i++)
+                for (int i = 0; i < result.Items.Count; i++)
                 {
                     newEvents.Add(new RbtvEvent(result.Items[i].Start.DateTime.Value, result.Items[i].End.DateTime.Value, result.Items[i].Summary));
                 }
@@ -60,6 +88,7 @@ namespace RBTVSendeplanCS.Reader
             catch
             {
             }
+
             return newEvents;
         }
     }
