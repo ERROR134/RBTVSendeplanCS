@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using RBTVSendeplanCS.Reader;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 
 namespace RBTVSendeplanCS
@@ -87,26 +88,33 @@ namespace RBTVSendeplanCS
 
 		private void MainForm_Load(object sender, EventArgs e)
         {
-            // Fallback to ICS if there's no apiKey
-            ReaderType readerTypeToCreate = (!String.IsNullOrEmpty(m_apiKey)) ? ReaderType.GoogleApi : ReaderType.GoogleIcs;
-
-            // Get reader and init
-            m_planReader = new ReaderFactory().CreateReader(m_calendarId, readerTypeToCreate);
-            if (m_planReader is GoogleApiReader)
+            try
             {
-                ((GoogleApiReader) m_planReader).ApiKey = m_apiKey;
+                // Fallback to ICS if there's no apiKey
+                ReaderType readerTypeToCreate = (!String.IsNullOrEmpty(m_apiKey)) ? ReaderType.GoogleApi : ReaderType.GoogleIcs;
+
+                // Get reader and init
+                m_planReader = new ReaderFactory().CreateReader(m_calendarId, readerTypeToCreate);
+                if (m_planReader is GoogleApiReader)
+                {
+                    ((GoogleApiReader)m_planReader).ApiKey = m_apiKey;
+                }
+
+                bool r = m_planReader.Init().Result;
+                Init();
+
+                // load event async (not waiting time for gui)
+                new Thread(new ThreadStart(LoadEvents)).Start();
+
+                m_checkDateTimeForNotify = new System.Windows.Forms.Timer();
+                m_checkDateTimeForNotify.Interval = 10000; // every 10 secs; 6 times per minute
+                m_checkDateTimeForNotify.Tick += new EventHandler(CheckDateTimeForNotify);
+                m_checkDateTimeForNotify.Start();
             }
-
-            bool r = m_planReader.Init().Result;
-            Init();
-     
-            // load event async (not waiting time for gui)
-			new Thread(new ThreadStart(LoadEvents)).Start();
-
-            m_checkDateTimeForNotify = new System.Windows.Forms.Timer();
-            m_checkDateTimeForNotify.Interval = 10000; // every 10 secs; 6 times per minute
-            m_checkDateTimeForNotify.Tick += new EventHandler(CheckDateTimeForNotify);
-            m_checkDateTimeForNotify.Start();
+            catch (Exception)
+            {
+                
+            }
         }
 
 

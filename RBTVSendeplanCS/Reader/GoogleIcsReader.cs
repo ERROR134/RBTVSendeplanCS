@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace RBTVSendeplanCS.Reader
@@ -79,10 +80,10 @@ namespace RBTVSendeplanCS.Reader
                         line = strReader.ReadLine();
                         ls = line.Substring(0, 8);
                     }
-
+                    
                     string summary = line.Substring(8);
-                    DateTime Start = DateTime.ParseExact(start.Substring(8), "yyyyMMddTHHmmssssZ", CultureInfo.InvariantCulture);
-                    DateTime End = DateTime.ParseExact(end.Substring(6), "yyyyMMddTHHmmssssZ", CultureInfo.InvariantCulture);
+                    DateTime Start = DateTime.ParseExact(Regex.Match(start, "[0-9]{8}T[0-9]{6}").Groups[0].Value, "yyyyMMddTHHmmssss", CultureInfo.InvariantCulture);
+                    DateTime End = DateTime.ParseExact(Regex.Match(end, "[0-9]{8}T[0-9]{6}").Groups[0].Value, "yyyyMMddTHHmmssss", CultureInfo.InvariantCulture);
                     if (End >= DateTime.Now)
                         events.Add(new RbtvEvent(Start, End, summary));//Ad new Event 
                 }
