@@ -93,7 +93,7 @@ namespace RBTVSendeplanCS
             {
                 if (Event_OnError != null)
                 {
-                    Event_OnError.Invoke(null, new OnErrorEventArgs(ex));
+                    Event_OnError.Invoke(this, new OnErrorEventArgs(ex));
                 }
             }
 		}
@@ -101,26 +101,36 @@ namespace RBTVSendeplanCS
 
 		private void MainForm_Load(object sender, EventArgs e)
         {
-            // Fallback to ICS if there's no apiKey
-            ReaderType readerTypeToCreate = (!String.IsNullOrEmpty(m_apiKey)) ? ReaderType.GoogleApi : ReaderType.GoogleIcs;
+			try
+			{
+				// Fallback to ICS if there's no apiKey
+				ReaderType readerTypeToCreate = (!String.IsNullOrEmpty(m_apiKey)) ? ReaderType.GoogleApi : ReaderType.GoogleIcs;
 
-            // Get reader and init
-            m_planReader = new ReaderFactory().CreateReader(m_calendarId, readerTypeToCreate);
-            if (m_planReader is GoogleApiReader)
-            {
-                ((GoogleApiReader)m_planReader).ApiKey = m_apiKey;
-            }
+				// Get reader and init
+				m_planReader = new ReaderFactory().CreateReader(m_calendarId, readerTypeToCreate);
+				if (m_planReader is GoogleApiReader)
+				{
+					((GoogleApiReader)m_planReader).ApiKey = m_apiKey;
+				}
 
-            bool r = m_planReader.Init().Result;
-            Init();
+				bool r = m_planReader.Init().Result;
+				Init();
 
-            // load event async (not waiting time for gui)
-            new Thread(new ThreadStart(LoadEvents)).Start();
+				// load event async (not waiting time for gui)
+				new Thread(new ThreadStart(LoadEvents)).Start();
 
-            m_checkDateTimeForNotify = new System.Windows.Forms.Timer();
-            m_checkDateTimeForNotify.Interval = 10000; // every 10 secs; 6 times per minute
-            m_checkDateTimeForNotify.Tick += new EventHandler(CheckDateTimeForNotify);
-            m_checkDateTimeForNotify.Start();
+				m_checkDateTimeForNotify = new System.Windows.Forms.Timer();
+				m_checkDateTimeForNotify.Interval = 10000; // every 10 secs; 6 times per minute
+				m_checkDateTimeForNotify.Tick += new EventHandler(CheckDateTimeForNotify);
+				m_checkDateTimeForNotify.Start();
+			}
+			catch (Exception ex)
+			{
+				if (Event_OnError != null)
+				{
+					Event_OnError.Invoke(this, new OnErrorEventArgs(ex));
+				}
+			}
         }
 
 
@@ -133,27 +143,37 @@ namespace RBTVSendeplanCS
         {
             if (m_events != null)
             {
-                foreach (RbtvEvent currentEvent in m_events)
-                {
-                    // just events which where never pushed to tooltip/tray icon
-                    if (!currentEvent.WasPushedToTrayIcon)
-                    {
-                        // 5 minutes before the show, trigger notify
-                        if (DateTime.Now >= currentEvent.Start.AddMinutes(0) && DateTime.Now <= currentEvent.Start)
-                        {
-                            if (this.WindowState == FormWindowState.Minimized)
-                            {
-                                // notifyicon should be already there (see MainForm_Resize)
-                                NotifyIcon.BalloonTipTitle = "[RBTV] Sendeplan";
-                                NotifyIcon.BalloonTipText = currentEvent.Name.Trim() + " | " + currentEvent.Start.ToString("HH:mm") + " - " + currentEvent.End.ToString("HH:mm") + " | " + currentEvent.EventType.ToString().ToUpper();
-                                NotifyIcon.ShowBalloonTip(1500);
+				try
+				{
+					foreach (RbtvEvent currentEvent in m_events)
+					{
+						// just events which where never pushed to tooltip/tray icon
+						if (!currentEvent.WasPushedToTrayIcon)
+						{
+							// 5 minutes before the show, trigger notify
+							if (DateTime.Now >= currentEvent.Start.AddMinutes(0) && DateTime.Now <= currentEvent.Start)
+							{
+								if (this.WindowState == FormWindowState.Minimized)
+								{
+									// notifyicon should be already there (see MainForm_Resize)
+									NotifyIcon.BalloonTipTitle = "[RBTV] Sendeplan";
+									NotifyIcon.BalloonTipText = currentEvent.Name.Trim() + " | " + currentEvent.Start.ToString("HH:mm") + " - " + currentEvent.End.ToString("HH:mm") + " | " + currentEvent.EventType.ToString().ToUpper();
+									NotifyIcon.ShowBalloonTip(1500);
 
-                                currentEvent.WasPushedToTrayIcon = true;
-                                currentEvent.LastTrayIconNotify = DateTime.Now;
-                            }
-                        }
-                    }
-                }
+									currentEvent.WasPushedToTrayIcon = true;
+									currentEvent.LastTrayIconNotify = DateTime.Now;
+								}
+							}
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					if (Event_OnError != null)
+					{
+						Event_OnError.Invoke(this, new OnErrorEventArgs(ex));
+					}
+				}
             }
         }
 
@@ -232,56 +252,66 @@ namespace RBTVSendeplanCS
 
         public void AddEventsToPanel()
         {
-            //Clear panel first
-			eventListPanel.Controls.Clear();
-
-			// There are now events
-			if (m_events.Count < 1)
+			try
 			{
-				Label loadingLabel = new Label() { Text = "No events found!", Font = new Font(Font.Name, 10, FontStyle.Regular), Location = new Point(5, 10), Size = new Size(eventListPanel.Size.Width, 20) };
-				eventListPanel.Controls.Add(loadingLabel);
-				return;
+				//Clear panel first
+				eventListPanel.Controls.Clear();
+
+				// There are now events
+				if (m_events.Count < 1)
+				{
+					Label loadingLabel = new Label() { Text = "No events found!", Font = new Font(Font.Name, 10, FontStyle.Regular), Location = new Point(5, 10), Size = new Size(eventListPanel.Size.Width, 20) };
+					eventListPanel.Controls.Add(loadingLabel);
+					return;
+				}
+
+				//put all the events in the panels
+				for (int i = 0; i < m_events.Count; i++)
+				{
+					Panel p = new Panel();
+					p.Size = new Size(eventListPanel.Size.Width, 50);
+					p.Location = new Point(0, i * 50);
+
+					PictureBox typePic = new PictureBox() { SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) };
+					switch (m_events[i].EventType)
+					{
+						case RbtvEventType.Old:
+							typePic.Image = RBTVSendeplanCS.Properties.Resources.rerun;
+							break;
+						case RbtvEventType.Live:
+							typePic.Image = RBTVSendeplanCS.Properties.Resources.live;
+							break;
+						case RbtvEventType.New:
+							typePic.Image = RBTVSendeplanCS.Properties.Resources._new;
+							break;
+					}
+					typePic.MouseEnter += new EventHandler(this.ParentMouseEnter);
+					typePic.MouseLeave += new EventHandler(this.ParentMouseLeave);
+					p.Controls.Add(typePic);
+
+					Label nameLabel = new Label() { Text = m_events[i].Name, Font = new Font(Font.Name, 10, FontStyle.Bold), Location = new Point(30, 10), Size = new Size(p.Size.Width, 20) };
+					nameLabel.MouseEnter += new EventHandler(this.ParentMouseEnter);
+					nameLabel.MouseLeave += new EventHandler(this.ParentMouseLeave);
+					p.Controls.Add(nameLabel);
+
+					Label timeLabel = new Label() { Text = m_events[i].Start.ToString("dd.MM.yyyy HH:mm"), Location = new Point(40, 30) };
+					timeLabel.MouseEnter += new EventHandler(this.ParentMouseEnter);
+					timeLabel.MouseLeave += new EventHandler(this.ParentMouseLeave);
+					p.Controls.Add(timeLabel);
+
+					p.MouseEnter += new EventHandler(this.PanelMouseEnter);
+					p.MouseLeave += new EventHandler(this.PanelMouseLeave);
+
+					eventListPanel.Controls.Add(p);
+				}
 			}
-
-            //put all the events in the panels
-            for (int i = 0; i < m_events.Count; i++)
-            {
-                Panel p = new Panel();
-				p.Size = new Size(eventListPanel.Size.Width, 50);
-                p.Location = new Point(0, i * 50);
-
-                PictureBox typePic = new PictureBox(){ SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) };
-                switch (m_events[i].EventType)
-                {
-                    case RbtvEventType.Old:
-                        typePic.Image = RBTVSendeplanCS.Properties.Resources.rerun;
-                        break;
-                    case RbtvEventType.Live:
-                        typePic.Image = RBTVSendeplanCS.Properties.Resources.live;
-                        break;
-                    case RbtvEventType.New:
-                        typePic.Image = RBTVSendeplanCS.Properties.Resources._new;
-                        break;
-                }
-                typePic.MouseEnter += new EventHandler(this.ParentMouseEnter);
-                typePic.MouseLeave += new EventHandler(this.ParentMouseLeave);
-                p.Controls.Add(typePic);
-                
-				Label nameLabel = new Label() { Text = m_events[i].Name, Font = new Font(Font.Name, 10, FontStyle.Bold), Location = new Point(30, 10), Size = new Size(p.Size.Width, 20) };
-                nameLabel.MouseEnter += new EventHandler(this.ParentMouseEnter);
-                nameLabel.MouseLeave += new EventHandler(this.ParentMouseLeave);
-                p.Controls.Add(nameLabel);
-                
-				Label timeLabel = new Label() { Text = m_events[i].Start.ToString("dd.MM.yyyy HH:mm"), Location = new Point(40, 30) };
-                timeLabel.MouseEnter += new EventHandler(this.ParentMouseEnter);
-                timeLabel.MouseLeave += new EventHandler(this.ParentMouseLeave);
-                p.Controls.Add(timeLabel);
-                
-				p.MouseEnter += new EventHandler(this.PanelMouseEnter);
-                p.MouseLeave += new EventHandler(this.PanelMouseLeave);
-
-				eventListPanel.Controls.Add(p);
-            }
+			catch (Exception ex)
+			{
+				if (Event_OnError != null)
+				{
+					Event_OnError.Invoke(this, new OnErrorEventArgs(ex));
+				}
+			}
         }
 
 
