@@ -81,10 +81,10 @@ namespace RBTVSendeplanCS.Reader
                     }
 
                     string summary = line.Substring(8);
-                    start = start.Substring(start.IndexOf(':') + 1);
+                    start = start.Substring(start.IndexOf(':') + 1); //The ICS file changed, so now the time has to extracteed after the ':'
                     end = end.Substring(end.IndexOf(':') + 1);
                     DateTime Start, End;
-                    try
+                    try//Sometimes there is a 'Z' at the end and sometimes not. So some kind of try catch hack is needed
                     {
                         Start = DateTime.ParseExact(start, "yyyyMMddTHHmmssssZ", CultureInfo.InvariantCulture);
                         End = DateTime.ParseExact(end, "yyyyMMddTHHmmssssZ", CultureInfo.InvariantCulture);

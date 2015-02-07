@@ -18,7 +18,7 @@ namespace RBTVSendeplanCS
 
     public partial class MainForm : Form
     {
-
+        //IF THE API KEY IS NOT INSERTED HERE THERE WILL BE ERRORS IN THE SENDEPLAN!
         #region Membervars
 
         // FIXME: to be removed from here loading from config?
@@ -35,6 +35,7 @@ namespace RBTVSendeplanCS
 		private IPlanReader m_planReader;
         private event OnEventsLoadedHandler Event_OnEventsLoaded;
 
+        private Notificator notificator;
         #endregion
         
 
@@ -74,7 +75,9 @@ namespace RBTVSendeplanCS
 		{
 			m_events = m_planReader.FetchEvents();
 
-            SortEvents(m_events);
+            if(m_events is GoogleIcsReader)
+                SortEvents(m_events);
+
 			if (Event_OnEventsLoaded != null)
 			{
 				Event_OnEventsLoaded.Invoke(this, null);
@@ -99,6 +102,8 @@ namespace RBTVSendeplanCS
      
             // load event async (not waiting time for gui)
 			new Thread(new ThreadStart(LoadEvents)).Start();
+
+            //notificator.ShowMbNotification();
         }
 
 

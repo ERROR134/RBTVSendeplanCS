@@ -28,6 +28,22 @@ namespace RBTVSendeplanCS
         private void Settings_Load(object sender, EventArgs e)
         {
             cb_UpdateInterval.SelectedText = RBTVSendeplanCS.Properties.Settings.Default.UpdateInterval.ToString();
+
+            switch(RBTVSendeplanCS.Properties.Settings.Default.NotificationTime)
+            {
+                case 0:
+                    rbtn_notify_never.Checked = true;
+                    break;
+                case 5:
+                    rbtn_notify_5min.Checked = true;
+                    break;
+                case 10:
+                    rbtn_notify_10min.Checked = true;
+                    break;
+                case 15:
+                    rbtn_notify_15min.Checked = true;
+                    break;
+            }
         }
     }
 }
