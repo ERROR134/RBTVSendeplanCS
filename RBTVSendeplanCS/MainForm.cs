@@ -20,7 +20,7 @@ namespace RBTVSendeplanCS
 
     public partial class MainForm : Form
     {
-
+        //IF THE API KEY IS NOT INSERTED HERE THERE WILL BE ERRORS IN THE SENDEPLAN!
         #region Membervars
 
         private System.Windows.Forms.Timer m_checkDateTimeForNotify;
@@ -41,6 +41,7 @@ namespace RBTVSendeplanCS
         private event OnErrorHandler Event_OnError;
         private event OnEventsLoadedHandler Event_OnEventsLoaded;
 
+        private Notificator notificator;
         #endregion
         
 
@@ -79,23 +80,22 @@ namespace RBTVSendeplanCS
 
 		private void LoadEvents()
 		{
-            try
-            {
-                m_events = m_planReader.FetchEvents();
-
-                SortEvents(m_events);
-                if (Event_OnEventsLoaded != null)
-                {
-                    Event_OnEventsLoaded.Invoke(this, null);
-                }
-            }
-            catch (Exception ex)
-            {
-                if (Event_OnError != null)
-                {
-                    Event_OnError.Invoke(this, new OnErrorEventArgs(ex));
-                }
-            }
+			try
+      {
+        m_events = m_planReader.FetchEvents();
+        SortEvents(m_events);
+        if (Event_OnEventsLoaded != null)
+				{
+					Event_OnEventsLoaded.Invoke(this, null);
+				}
+      }
+      catch (Exception ex)
+      {
+        if (Event_OnError != null)
+				{
+					Event_OnError.Invoke(this, new OnErrorEventArgs(ex));
+				}
+      }
 		}
 
 
@@ -141,40 +141,49 @@ namespace RBTVSendeplanCS
         /// <param name="e"></param>
         private void CheckDateTimeForNotify(object sender, EventArgs e)
         {
-            if (m_events != null)
-            {
-				try
-				{
-					foreach (RbtvEvent currentEvent in m_events)
+					if (m_events != null)
 					{
-						// just events which where never pushed to tooltip/tray icon
-						if (!currentEvent.WasPushedToTrayIcon)
+						try
 						{
-							// 5 minutes before the show, trigger notify
-							if (DateTime.Now >= currentEvent.Start.AddMinutes(0) && DateTime.Now <= currentEvent.Start)
+							foreach (RbtvEvent currentEvent in m_events)
 							{
-								if (this.WindowState == FormWindowState.Minimized)
+								// just events which where never pushed to tooltip/tray icon
+								if (!currentEvent.WasPushedToTrayIcon)
 								{
-									// notifyicon should be already there (see MainForm_Resize)
-									NotifyIcon.BalloonTipTitle = "[RBTV] Sendeplan";
-									NotifyIcon.BalloonTipText = currentEvent.Name.Trim() + " | " + currentEvent.Start.ToString("HH:mm") + " - " + currentEvent.End.ToString("HH:mm") + " | " + currentEvent.EventType.ToString().ToUpper();
-									NotifyIcon.ShowBalloonTip(1500);
+									// 5 minutes before the show, trigger notify
+									if (DateTime.Now >= currentEvent.Start.AddMinutes(0) && DateTime.Now <= currentEvent.Start)
+									{
+										if (this.WindowState == FormWindowState.Minimized)
+										{
+											// notifyicon should be already there (see MainForm_Resize)
+											NotifyIcon.BalloonTipTitle = "[RBTV] Sendeplan";
+											NotifyIcon.BalloonTipText = currentEvent.Name.Trim() + " | " + currentEvent.Start.ToString("HH:mm") + " - " + currentEvent.End.ToString("HH:mm") + " | " + currentEvent.EventType.ToString().ToUpper();
+											NotifyIcon.ShowBalloonTip(1500);
 
-									currentEvent.WasPushedToTrayIcon = true;
-									currentEvent.LastTrayIconNotify = DateTime.Now;
+											currentEvent.WasPushedToTrayIcon = true;
+											currentEvent.LastTrayIconNotify = DateTime.Now;
+										}
+									}
 								}
 							}
 						}
+						catch (Exception ex)
+						{
+							if (Event_OnError != null)
+							{
+								Event_OnError.Invoke(this, new OnErrorEventArgs(ex));
+							}
+						}
 					}
-				}
-				catch (Exception ex)
-				{
-					if (Event_OnError != null)
-					{
-						Event_OnError.Invoke(this, new OnErrorEventArgs(ex));
-					}
-				}
-            }
+
+
+          bool r = m_planReader.Init().Result;
+          Init();
+     
+          // load event async (not waiting time for gui)
+					new Thread(new ThreadStart(LoadEvents)).Start();
+
+          //notificator.ShowMbNotification();
         }
 
 

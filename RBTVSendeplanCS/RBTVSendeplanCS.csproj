@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OnErrorEventArgs.cs" />
+    <Compile Include="Notificator.cs" />
     <Compile Include="RbtvEvent.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -100,6 +101,7 @@
     <Compile Include="MainFormCode.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="RbtvEventNotification.cs" />
     <Compile Include="Reader\GoogleApiReader.cs" />
     <Compile Include="Reader\GoogleIcsReader.cs" />
     <Compile Include="Reader\Interfaces\IPlanReader.cs" />
