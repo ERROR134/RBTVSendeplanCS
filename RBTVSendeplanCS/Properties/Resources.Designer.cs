@@ -143,6 +143,16 @@ namespace RBTVSendeplanCS.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap template {
+            get {
+                object obj = ResourceManager.GetObject("template", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Twitch {
             get {
                 object obj = ResourceManager.GetObject("Twitch", resourceCulture);

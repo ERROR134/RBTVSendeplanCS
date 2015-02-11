@@ -117,38 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="amazon_logo_SPOT" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\pic\amazon_logo_SPOT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="rbshop" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\pic\rbshop.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="g2a" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\pic\g2a.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="facebook" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\pic\1422060769_facebook-128.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="reddit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\pic\1422060765_reddit-128.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Twitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\pic\Twitch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="twitter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\pic\1422060771_twitter-128.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="live" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\pic\live.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="new" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\pic\new.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="rerun" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\pic\rerun.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="template" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\GUI\template.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
 </root>

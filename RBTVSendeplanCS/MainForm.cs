@@ -43,10 +43,13 @@ namespace RBTVSendeplanCS
 
         private Notificator notificator;
         #endregion
-        
+
+        PlanGUI gui;
 
         public MainForm()
         {
+            gui = new PlanGUI();
+            this.Controls.Add(gui);
             InitializeComponent();
             Event_OnEventsLoaded += new OnEventsLoadedHandler(AddEventsToPanel);
             Event_OnError += new OnErrorHandler(DisplayErrorPopup);
@@ -261,6 +264,7 @@ namespace RBTVSendeplanCS
 
         public void AddEventsToPanel()
         {
+            /*
 			try
 			{
 				//Clear panel first
@@ -321,6 +325,9 @@ namespace RBTVSendeplanCS
 					Event_OnError.Invoke(this, new OnErrorEventArgs(ex));
 				}
 			}
+             * */
+            gui.updateEvents(m_events);
+            gui.updateControl();
         }
 
 
