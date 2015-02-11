@@ -34,5 +34,17 @@ namespace RBTVSendeplanCS.Properties {
                 this["UpdateInterval"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int NotificationTime {
+            get {
+                return ((int)(this["NotificationTime"]));
+            }
+            set {
+                this["NotificationTime"] = value;
+            }
+        }
     }
 }

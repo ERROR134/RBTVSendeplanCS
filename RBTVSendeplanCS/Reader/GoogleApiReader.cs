@@ -73,9 +73,9 @@ namespace RBTVSendeplanCS.Reader
             {
 
                 EventsResource.ListRequest lr = Service.Events.List(m_calenderId);
+                lr.SingleEvents = true;
                 lr.TimeMin = DateTime.Now;
                 lr.TimeMax = DateTime.Now.AddDays(7);
-                lr.SingleEvents = true;
                 lr.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
 
                 Events result = lr.Execute();

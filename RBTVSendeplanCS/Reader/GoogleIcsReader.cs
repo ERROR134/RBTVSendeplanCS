@@ -84,6 +84,7 @@ namespace RBTVSendeplanCS.Reader
                     string summary = line.Substring(8);
                     DateTime Start = DateTime.ParseExact(Regex.Match(start, "[0-9]{8}T[0-9]{6}").Groups[0].Value, "yyyyMMddTHHmmssss", CultureInfo.InvariantCulture);
                     DateTime End = DateTime.ParseExact(Regex.Match(end, "[0-9]{8}T[0-9]{6}").Groups[0].Value, "yyyyMMddTHHmmssss", CultureInfo.InvariantCulture);
+
                     if (End >= DateTime.Now)
                         events.Add(new RbtvEvent(Start, End, summary));//Ad new Event 
                 }
