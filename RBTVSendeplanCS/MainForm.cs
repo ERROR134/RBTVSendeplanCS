@@ -284,7 +284,7 @@ namespace RBTVSendeplanCS
 					PictureBox typePic = new PictureBox() { SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) };
 					switch (m_events[i].EventType)
 					{
-						case RbtvEventType.Old:
+						case RbtvEventType.Replay:
 							typePic.Image = RBTVSendeplanCS.Properties.Resources.rerun;
 							break;
 						case RbtvEventType.Live:

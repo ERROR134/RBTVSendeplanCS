@@ -10,7 +10,7 @@ namespace RBTVSendeplanCS
     {
         Live,
         New,
-        Old
+        Replay
     }
 
     public class RbtvEvent
@@ -76,7 +76,7 @@ namespace RBTVSendeplanCS
                 summary = summary.Substring(3);
             }
             else
-                m_rbtvEventType = RbtvEventType.Old;
+                m_rbtvEventType = RbtvEventType.Replay;
             
             m_name = summary;
             m_startDateTime = start;
