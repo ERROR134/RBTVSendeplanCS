@@ -1,20 +1,44 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RBTVSendeplanCS", "RBTVSendeplanCS\RBTVSendeplanCS.csproj", "{5A76954C-2668-4596-815F-9EC90D65788C}"
 EndProject
+Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "RbtvSetup", "RbtvSetup\RbtvSetup.isproj", "{24CC3F40-3471-4591-A647-4D081CC9C91D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5A76954C-2668-4596-815F-9EC90D65788C} = {5A76954C-2668-4596-815F-9EC90D65788C}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CD_ROM|Any CPU = CD_ROM|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		DVD-5|Any CPU = DVD-5|Any CPU
 		Release|Any CPU = Release|Any CPU
+		SingleImage|Any CPU = SingleImage|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5A76954C-2668-4596-815F-9EC90D65788C}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{5A76954C-2668-4596-815F-9EC90D65788C}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
 		{5A76954C-2668-4596-815F-9EC90D65788C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5A76954C-2668-4596-815F-9EC90D65788C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A76954C-2668-4596-815F-9EC90D65788C}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A76954C-2668-4596-815F-9EC90D65788C}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
 		{5A76954C-2668-4596-815F-9EC90D65788C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A76954C-2668-4596-815F-9EC90D65788C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A76954C-2668-4596-815F-9EC90D65788C}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{5A76954C-2668-4596-815F-9EC90D65788C}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{24CC3F40-3471-4591-A647-4D081CC9C91D}.CD_ROM|Any CPU.ActiveCfg = CD_ROM
+		{24CC3F40-3471-4591-A647-4D081CC9C91D}.CD_ROM|Any CPU.Build.0 = CD_ROM
+		{24CC3F40-3471-4591-A647-4D081CC9C91D}.Debug|Any CPU.ActiveCfg = SingleImage
+		{24CC3F40-3471-4591-A647-4D081CC9C91D}.Debug|Any CPU.Build.0 = SingleImage
+		{24CC3F40-3471-4591-A647-4D081CC9C91D}.DVD-5|Any CPU.ActiveCfg = DVD-5
+		{24CC3F40-3471-4591-A647-4D081CC9C91D}.DVD-5|Any CPU.Build.0 = DVD-5
+		{24CC3F40-3471-4591-A647-4D081CC9C91D}.Release|Any CPU.ActiveCfg = SingleImage
+		{24CC3F40-3471-4591-A647-4D081CC9C91D}.Release|Any CPU.Build.0 = SingleImage
+		{24CC3F40-3471-4591-A647-4D081CC9C91D}.SingleImage|Any CPU.ActiveCfg = SingleImage
+		{24CC3F40-3471-4591-A647-4D081CC9C91D}.SingleImage|Any CPU.Build.0 = SingleImage
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
