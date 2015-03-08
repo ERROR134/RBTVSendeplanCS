@@ -47,6 +47,9 @@
     <Reference Include="Google.Apis.Core">
       <HintPath>..\packages\Google.Apis.Core.1.9.0\lib\portable-net40+sl50+win+wpa81+wp80\Google.Apis.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Google.Apis.Drive.v2">
+      <HintPath>..\packages\Google.Apis.Drive.v2.1.9.0.1600\lib\portable-net40+sl50+win+wpa81+wp80\Google.Apis.Drive.v2.dll</HintPath>
+    </Reference>
     <Reference Include="Google.Apis.PlatformServices">
       <HintPath>..\packages\Google.Apis.1.9.0\lib\net40\Google.Apis.PlatformServices.dll</HintPath>
     </Reference>
@@ -94,6 +97,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GUI\PlanGUI.designer.cs" />
+    <Compile Include="MyMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="OnErrorEventArgs.cs" />
     <Compile Include="Notificator.cs" />
     <Compile Include="RbtvEvent.cs" />
@@ -107,6 +113,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="RbtvEventNotification.cs" />
+    <Compile Include="RbtvPlanSettings.cs" />
     <Compile Include="Reader\GoogleApiReader.cs" />
     <Compile Include="Reader\GoogleIcsReader.cs" />
     <Compile Include="Reader\Interfaces\IPlanReader.cs" />
@@ -119,6 +126,7 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Updater.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

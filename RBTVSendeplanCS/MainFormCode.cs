@@ -33,6 +33,30 @@ namespace RBTVSendeplanCS
 			eventListPanel.Controls.Add(loadingLabel);
         }
 
+        bool CheckForSettingsFile()
+        {
+            return false;
+        }
+
+        bool SaveSettings()
+        {
+            RbtvPlanSettings newSettings = new RbtvPlanSettings();
+            newSettings.UpdateInterval = RBTVSendeplanCS.Properties.Settings.Default.UpdateInterval;
+            newSettings.NotificationTime = RBTVSendeplanCS.Properties.Settings.Default.NotificationTime;
+            newSettings.Version = RBTVSendeplanCS.Properties.Settings.Default.Version;
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            
+            newSettings.Context.
+
+            newSettings.Save();
+            return true;
+        }
+
+        bool LoadSettings()
+        {
+            return true;
+        }
+
         #region Menustrip Code
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {

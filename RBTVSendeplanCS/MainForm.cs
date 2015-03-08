@@ -48,6 +48,22 @@ namespace RBTVSendeplanCS
 
         public MainForm()
         {
+            Updater updater = new Updater();
+
+            if(updater.CheckForNewestVersion(RBTVSendeplanCS.Properties.Settings.Default.Version) != null)
+            {
+                MyMessageBox.
+            }
+
+            if(CheckForSettingsFile() == true)
+            {
+                LoadSettings();
+            }
+            else
+            {
+                SaveSettings();
+            }
+
             gui = new PlanGUI();
             this.Controls.Add(gui);
             InitializeComponent();
