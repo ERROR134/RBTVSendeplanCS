@@ -60,7 +60,7 @@ namespace RBTVSendeplanCS
                     {
                         string content = reader.ReadToEnd();
                         string str_version = content.Substring(0, content.IndexOf(';'));
-                        string hyperlink = content.Substring(content.IndexOf(';'));
+                        string hyperlink = content.Substring(content.IndexOf(';')+1);
                         double f_version = Convert.ToDouble(str_version);
                         if (f_version > current_version)
                             return hyperlink;

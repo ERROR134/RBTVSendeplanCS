@@ -40,15 +40,15 @@ namespace RBTVSendeplanCS
 
         bool SaveSettings()
         {
-            RbtvPlanSettings newSettings = new RbtvPlanSettings();
-            newSettings.UpdateInterval = RBTVSendeplanCS.Properties.Settings.Default.UpdateInterval;
-            newSettings.NotificationTime = RBTVSendeplanCS.Properties.Settings.Default.NotificationTime;
-            newSettings.Version = RBTVSendeplanCS.Properties.Settings.Default.Version;
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            //RbtvPlanSettings newSettings = new RbtvPlanSettings();
+            //newSettings.UpdateInterval = RBTVSendeplanCS.Properties.Settings.Default.UpdateInterval;
+            //newSettings.NotificationTime = RBTVSendeplanCS.Properties.Settings.Default.NotificationTime;
+            //newSettings.Version = RBTVSendeplanCS.Properties.Settings.Default.Version;
+            //string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             
-            newSettings.Context.
+            //newSettings.Context.
 
-            newSettings.Save();
+            //newSettings.Save();
             return true;
         }
 

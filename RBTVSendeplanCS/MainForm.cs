@@ -49,10 +49,10 @@ namespace RBTVSendeplanCS
         public MainForm()
         {
             Updater updater = new Updater();
-
-            if(updater.CheckForNewestVersion(RBTVSendeplanCS.Properties.Settings.Default.Version) != null)
+            string link = updater.CheckForNewestVersion(RBTVSendeplanCS.Properties.Settings.Default.Version);
+            if(link != null)
             {
-                MyMessageBox.
+                MyMessageBox.ShowDialog("New Version", "New Version available",link);
             }
 
             if(CheckForSettingsFile() == true)
