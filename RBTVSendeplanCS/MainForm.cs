@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -23,7 +22,7 @@ namespace RBTVSendeplanCS
         //IF THE API KEY IS NOT INSERTED HERE THERE WILL BE ERRORS IN THE SENDEPLAN!
         #region Membervars
 
-        private System.Windows.Forms.Timer m_checkDateTimeForNotify;
+        private System.Threading.Timer m_checkDateTimeForNotify;
 
         // FIXME: to be removed from here loading from config?
         private String m_calendarId = "h6tfehdpu3jrbcrn9sdju9ohj8@group.calendar.google.com";
@@ -33,6 +32,10 @@ namespace RBTVSendeplanCS
         private String m_apiKey = "";  // PUT OWN KEY HERE
 
         private List<RbtvEvent> m_events;
+        public List<RbtvEvent> Events
+        {
+            get { return m_events; }
+        }
         private ToolTip m_toolTip;
 		
 		private bool MinimizedWithIcon;
@@ -42,9 +45,11 @@ namespace RBTVSendeplanCS
         private event OnEventsLoadedHandler Event_OnEventsLoaded;
 
         private Notificator notificator;
-        #endregion
 
-        PlanGUI gui;
+        //Both forms
+        BigPlanForm bigForm;
+        PlanForm activeForm;
+        #endregion
 
         public MainForm()
         {
@@ -64,11 +69,46 @@ namespace RBTVSendeplanCS
                 SaveSettings();
             }
 
-            gui = new PlanGUI();
-            this.Controls.Add(gui);
             InitializeComponent();
             Event_OnEventsLoaded += new OnEventsLoadedHandler(AddEventsToPanel);
             Event_OnError += new OnErrorHandler(DisplayErrorPopup);
+            this.Show();
+            
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                // Fallback to ICS if there's no apiKey
+                ReaderType readerTypeToCreate = (!String.IsNullOrEmpty(m_apiKey)) ? ReaderType.GoogleApi : ReaderType.GoogleIcs;
+
+                // Get reader and init
+                m_planReader = new ReaderFactory().CreateReader(m_calendarId, readerTypeToCreate);
+                if (m_planReader is GoogleApiReader)
+                {
+                    ((GoogleApiReader)m_planReader).ApiKey = m_apiKey;
+                }
+
+                bool r = m_planReader.Init().Result;
+                Init();
+
+                // load event async (not waiting time for gui)
+                new Thread(new ThreadStart(LoadEvents)).Start();
+
+                m_checkDateTimeForNotify = new System.Threading.Timer(CheckDateTimeForNotify, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+            }
+            catch (Exception ex)
+            {
+                if (Event_OnError != null)
+                {
+                    Event_OnError.Invoke(this, new OnErrorEventArgs(ex));
+                }
+            }
+            bigForm = new BigPlanForm(this);
+            this.Hide();
+            activeForm = bigForm;
+            bigForm.ShowDialog();
         }
 
         /// <summary>
@@ -99,66 +139,29 @@ namespace RBTVSendeplanCS
 
 		private void LoadEvents()
 		{
-			try
-      {
-        m_events = m_planReader.FetchEvents();
-        SortEvents(m_events);
-        if (Event_OnEventsLoaded != null)
-				{
-					Event_OnEventsLoaded.Invoke(this, null);
-				}
-      }
-      catch (Exception ex)
-      {
-        if (Event_OnError != null)
-				{
-					Event_OnError.Invoke(this, new OnErrorEventArgs(ex));
-				}
-      }
+            try
+            {
+                m_events = m_planReader.FetchEvents();
+                SortEvents(m_events);
+                if (Event_OnEventsLoaded != null)
+		        {
+                    Event_OnEventsLoaded.Invoke(this, null);
+	            }
+            }
+            catch (Exception ex)
+            {
+                if (Event_OnError != null)
+			    {
+				    Event_OnError.Invoke(this, new OnErrorEventArgs(ex));
+		        }
+            }
 		}
-
-
-		private void MainForm_Load(object sender, EventArgs e)
-        {
-			try
-			{
-				// Fallback to ICS if there's no apiKey
-				ReaderType readerTypeToCreate = (!String.IsNullOrEmpty(m_apiKey)) ? ReaderType.GoogleApi : ReaderType.GoogleIcs;
-
-				// Get reader and init
-				m_planReader = new ReaderFactory().CreateReader(m_calendarId, readerTypeToCreate);
-				if (m_planReader is GoogleApiReader)
-				{
-					((GoogleApiReader)m_planReader).ApiKey = m_apiKey;
-				}
-
-				bool r = m_planReader.Init().Result;
-				Init();
-
-				// load event async (not waiting time for gui)
-				new Thread(new ThreadStart(LoadEvents)).Start();
-
-				m_checkDateTimeForNotify = new System.Windows.Forms.Timer();
-				m_checkDateTimeForNotify.Interval = 10000; // every 10 secs; 6 times per minute
-				m_checkDateTimeForNotify.Tick += new EventHandler(CheckDateTimeForNotify);
-				m_checkDateTimeForNotify.Start();
-			}
-			catch (Exception ex)
-			{
-				if (Event_OnError != null)
-				{
-					Event_OnError.Invoke(this, new OnErrorEventArgs(ex));
-				}
-			}
-        }
-
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CheckDateTimeForNotify(object sender, EventArgs e)
+        private void CheckDateTimeForNotify(object sender)
         {
 					if (m_events != null)
 					{
@@ -280,70 +283,7 @@ namespace RBTVSendeplanCS
 
         public void AddEventsToPanel()
         {
-            /*
-			try
-			{
-				//Clear panel first
-				eventListPanel.Controls.Clear();
-
-				// There are now events
-				if (m_events.Count < 1)
-				{
-					Label loadingLabel = new Label() { Text = "No events found!", Font = new Font(Font.Name, 10, FontStyle.Regular), Location = new Point(5, 10), Size = new Size(eventListPanel.Size.Width, 20) };
-					eventListPanel.Controls.Add(loadingLabel);
-					return;
-				}
-
-				//put all the events in the panels
-				for (int i = 0; i < m_events.Count; i++)
-				{
-					Panel p = new Panel();
-					p.Size = new Size(eventListPanel.Size.Width, 50);
-					p.Location = new Point(0, i * 50);
-
-					PictureBox typePic = new PictureBox() { SizeMode = PictureBoxSizeMode.Zoom, Location = new Point(0, 0), Size = new Size(30, 30) };
-					switch (m_events[i].EventType)
-					{
-						case RbtvEventType.Replay:
-							typePic.Image = RBTVSendeplanCS.Properties.Resources.rerun;
-							break;
-						case RbtvEventType.Live:
-							typePic.Image = RBTVSendeplanCS.Properties.Resources.live;
-							break;
-						case RbtvEventType.New:
-							typePic.Image = RBTVSendeplanCS.Properties.Resources._new;
-							break;
-					}
-					typePic.MouseEnter += new EventHandler(this.ParentMouseEnter);
-					typePic.MouseLeave += new EventHandler(this.ParentMouseLeave);
-					p.Controls.Add(typePic);
-
-					Label nameLabel = new Label() { Text = m_events[i].Name, Font = new Font(Font.Name, 10, FontStyle.Bold), Location = new Point(30, 10), Size = new Size(p.Size.Width, 20) };
-					nameLabel.MouseEnter += new EventHandler(this.ParentMouseEnter);
-					nameLabel.MouseLeave += new EventHandler(this.ParentMouseLeave);
-					p.Controls.Add(nameLabel);
-
-					Label timeLabel = new Label() { Text = m_events[i].Start.ToString("dd.MM.yyyy HH:mm"), Location = new Point(40, 30) };
-					timeLabel.MouseEnter += new EventHandler(this.ParentMouseEnter);
-					timeLabel.MouseLeave += new EventHandler(this.ParentMouseLeave);
-					p.Controls.Add(timeLabel);
-
-					p.MouseEnter += new EventHandler(this.PanelMouseEnter);
-					p.MouseLeave += new EventHandler(this.PanelMouseLeave);
-
-					eventListPanel.Controls.Add(p);
-				}
-			}
-			catch (Exception ex)
-			{
-				if (Event_OnError != null)
-				{
-					Event_OnError.Invoke(this, new OnErrorEventArgs(ex));
-				}
-			}
-             * */
-            gui.updateEvents(m_events);
-            gui.updateControl();
+            activeForm.RbtvEventsLoaded(m_events);
         }
 
 
@@ -401,6 +341,11 @@ namespace RBTVSendeplanCS
             }
 
             MessageBox.Show(eventArgs.Error.Message, "Es ist ein Fehler aufgetreten!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        public MenuStrip GetMenuStrip()
+        {
+            return this.menuStrip1;
         }
     }
 }

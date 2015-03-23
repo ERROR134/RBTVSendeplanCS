@@ -92,25 +92,37 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BigPlanForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BigPlanForm.Designer.cs">
+      <DependentUpon>BigPlanForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\MyList.cs" />
     <Compile Include="GUI\PlanGUI.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GUI\PlanGUI.designer.cs" />
+    <Compile Include="MainFormCode.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MyMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="OnErrorEventArgs.cs" />
     <Compile Include="Notificator.cs" />
+    <Compile Include="PlanForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PlanForm.Designer.cs">
+      <DependentUpon>PlanForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="RbtvEvent.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainFormCode.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RbtvEventNotification.cs" />
     <Compile Include="RbtvPlanSettings.cs" />
@@ -127,10 +139,16 @@
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="Updater.cs" />
+    <EmbeddedResource Include="BigPlanForm.resx">
+      <DependentUpon>BigPlanForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\PlanGUI.resx" />
+    <EmbeddedResource Include="PlanForm.resx">
+      <DependentUpon>PlanForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

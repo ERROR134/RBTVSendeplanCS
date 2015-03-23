@@ -32,9 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.eventListPanel = new System.Windows.Forms.Panel();
             this.NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.einstellungenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.picReddit = new System.Windows.Forms.PictureBox();
             this.picTwitch = new System.Windows.Forms.PictureBox();
@@ -43,7 +40,9 @@
             this.picG2a = new System.Windows.Forms.PictureBox();
             this.picRbShop = new System.Windows.Forms.PictureBox();
             this.picAmazon = new System.Windows.Forms.PictureBox();
-            this.menuStrip1.SuspendLayout();
+            this.einstellungenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             ((System.ComponentModel.ISupportInitialize)(this.picReddit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picTwitch)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picFb)).BeginInit();
@@ -51,6 +50,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.picG2a)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picRbShop)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAmazon)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // eventListPanel
@@ -68,31 +68,6 @@
             this.NotifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("NotifyIcon.Icon")));
             this.NotifyIcon.Text = "RBTV Sendeplan";
             this.NotifyIcon.Click += new System.EventHandler(this.NotifyIcon_Click);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.einstellungenToolStripMenuItem,
-            this.aboutToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(967, 24);
-            this.menuStrip1.TabIndex = 4;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // einstellungenToolStripMenuItem
-            // 
-            this.einstellungenToolStripMenuItem.Name = "einstellungenToolStripMenuItem";
-            this.einstellungenToolStripMenuItem.Size = new System.Drawing.Size(90, 20);
-            this.einstellungenToolStripMenuItem.Text = "Einstellungen";
-            this.einstellungenToolStripMenuItem.Click += new System.EventHandler(this.einstellungenToolStripMenuItem_Click);
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // UpdateTimer
             // 
@@ -182,6 +157,31 @@
             this.picAmazon.MouseEnter += new System.EventHandler(this.picAmazon_MouseEnter);
             this.picAmazon.MouseLeave += new System.EventHandler(this.picAmazon_MouseLeave);
             // 
+            // einstellungenToolStripMenuItem
+            // 
+            this.einstellungenToolStripMenuItem.Name = "einstellungenToolStripMenuItem";
+            this.einstellungenToolStripMenuItem.Size = new System.Drawing.Size(90, 20);
+            this.einstellungenToolStripMenuItem.Text = "Einstellungen";
+            this.einstellungenToolStripMenuItem.Click += new System.EventHandler(this.einstellungenToolStripMenuItem_Click);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.einstellungenToolStripMenuItem,
+            this.aboutToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(967, 24);
+            this.menuStrip1.TabIndex = 4;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -204,8 +204,6 @@
             this.Text = "RocketBeansTV";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picReddit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picTwitch)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picFb)).EndInit();
@@ -213,6 +211,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.picG2a)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picRbShop)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picAmazon)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -225,14 +225,14 @@
         private System.Windows.Forms.PictureBox picAmazon;
         private System.Windows.Forms.PictureBox picRbShop;
         private System.Windows.Forms.PictureBox picG2a;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.Timer UpdateTimer;
-        private System.Windows.Forms.ToolStripMenuItem einstellungenToolStripMenuItem;
         private System.Windows.Forms.PictureBox picTwitter;
         private System.Windows.Forms.PictureBox picReddit;
         private System.Windows.Forms.PictureBox picTwitch;
         private System.Windows.Forms.PictureBox picFb;
+        private System.Windows.Forms.ToolStripMenuItem einstellungenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        public System.Windows.Forms.MenuStrip menuStrip1;
 
 
 
